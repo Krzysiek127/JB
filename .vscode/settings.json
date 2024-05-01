@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "winuser.h": "c",
+        "stdio.h": "c",
+        "stdlib.h": "c",
+        "string.h": "c",
+        "ctype.h": "c",
+        "winsock2.h": "c",
+        "windows.h": "c"
+    }
+}
