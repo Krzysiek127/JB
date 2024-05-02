@@ -1,0 +1,49 @@
+#ifndef FUN
+#define FUN
+
+#include "../Main.h"
+
+typedef enum {
+    /* --- Templates --- */
+    JB_FUN,
+    JB_DEACTIVE,    // Deactive jailbraker
+    JB_REMOVE,      // Delete from pc completely
+
+    /* --- Sounds --- */
+    JB_VOLUME,
+    JB_SZAMBO,      
+    // ... //
+    JB_SCREAM,
+
+    /* --- Wallpaper --- */
+    JB_SETWALL,
+    JB_SAVEWALL,
+    JB_LOADWALL,
+
+    /* --- Shortcuts --- */
+    JB_CREATELINKS,
+    JB_REMOVELINKS,
+    JB_OPENWEB,
+
+    /* --- Other --- */
+    JB_CDEJECT,     // eject disk drive
+    JB_POPUP,       // MessageBox
+    JB_EXEC,        // execute a cmdlet
+    JB_ROTATESCR,   // SetDisplayAutoRotationPreferences
+    JB_CHANGERES,   
+
+    JB_SENDKEY      // ?
+} JB_Instruction;
+
+typedef struct {
+    char auth[24];
+    JB_Instruction cmd;     // JB_POPUP "Title¿"Polskie szamba liderem są w kraju"\0"
+    char args[CMD_ARGSZ];
+} JBCMD; // JailBreaker Command
+
+WINBOOL changeWallpaper(char *path);
+void execCommand(JBCMD cmd);
+// TODO: implement these
+void sendError(const char *message);
+
+#endif

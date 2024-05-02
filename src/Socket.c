@@ -24,10 +24,6 @@ int UDPBegin(struct TeltharSocket *tsock) {
     return 0;
 }
 
-//void UDPSend(void *data, size_t len) {
-//    send()
-//}
-
 int UDPRecv(struct TeltharSocket *tsock, void *out, size_t maxlen) {
     memset(out, '\0', maxlen);
 
@@ -36,7 +32,8 @@ int UDPRecv(struct TeltharSocket *tsock, void *out, size_t maxlen) {
         printf("WSA error: %d", WSAGetLastError());
         return -1;
     }
-
+    assert(recvl == maxlen);
+    
     return recvl;
 }
 

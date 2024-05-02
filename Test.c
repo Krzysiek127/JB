@@ -17,4 +17,5 @@ int main() {
         
         printf("%s", buffer);
     }
+    UDPClose(&tsocket);
 }

