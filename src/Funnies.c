@@ -1,8 +1,28 @@
 #include "Funnies.h"
 
-WINBOOL changeWallpaper(char *path)
-{
+WINBOOL changeWallpaper(char *path) {
     return SystemParametersInfoA(SPI_SETDESKWALLPAPER, 0, path, SPIF_UPDATEINIFILE);
+}
+
+/*
+Use DMDO_X macro or number between 0 - 3 (inclusive)
+    Default - 0
+    90      - 1
+    180     - 2
+    270     - 3
+*/
+LONG ChangeRotation(DWORD Orient) {
+    DEVMODE mode;
+
+    EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &mode);
+    if (mode.dmFields | DM_DISPLAYORIENTATION) {
+        mode.dmDisplayOrientation = Orient;
+        return ChangeDisplaySettings(&mode, 0);
+    }
+}
+
+void openLink(const char *url) {
+    ShellExecute(NULL, "open", url, NULL, NULL, SW_SHOWNORMAL);
 }
 
 const char *PCName;
@@ -110,7 +130,6 @@ void execCommand(JBCMD cmd)
 
         break;
     case JB_ROTATESCR:
-
         break;
     case JB_CHANGERES:
 
@@ -120,7 +139,6 @@ void execCommand(JBCMD cmd)
         break;
 
     default:
-
         sendError("Unknown command");
         break;
     }

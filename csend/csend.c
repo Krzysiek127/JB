@@ -11,8 +11,8 @@ Epic trollage!!!1!
 
 // Used for debugging purposes, copied from stackoverflow
 void hexDump (
-    const char * desc,
-    const void * addr,
+    const char *desc,
+    const void *addr,
     const int len,
     int perLine
 ) {
@@ -152,8 +152,9 @@ int main(int argc, char *argv[]) {
     int s = sendto(mSock, (const char *)&payload, sizeof(JBCMD), 0, (struct sockaddr*)&recv_addr, sizeof(recv_addr));
     printf("Auth: \"%s\" (%lld/%lld)\nCMD: %u\n", payload.auth, strlen(payload.auth), sizeof(payload.auth), payload.cmd);
     hexDump("DATA", &payload, sizeof(payload), 16);
-    printf("Argument length: %d\nBytes on wire: %d", argputPtr, s);
+    printf("Argument length: %d\nPayload length: %lld; Bytes on wire: %d", argputPtr, sizeof(payload), s);
 
-    // Remember kids to free your pointers after work!
-    free(separgs);
+    // TODO: For some reason, I can send 3 chars over the limit until sendto returns -1 and won't send anything
+    // This additional chars DO get trimmed and aren't present in for example popupA but will need investigation, as it's probably Undefined Behaviour
+    return 0;
 }

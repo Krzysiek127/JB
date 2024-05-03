@@ -42,7 +42,8 @@ typedef struct {
     char args[CMD_ARGSZ];
 } JBCMD; // JailBreaker Command
 
-WINBOOL changeWallpaper(char *path);
+//WINBOOL changeWallpaper(char *path);  // I think we don't need to expose it
+
 void execCommand(JBCMD cmd);
 void sendError(const char *message);
 
