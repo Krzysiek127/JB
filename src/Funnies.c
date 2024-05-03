@@ -8,6 +8,10 @@ WINBOOL changeWallpaper(char *path)
 const char *PCName;
 static char wallpaper[MAX_PATH] = BADPATH;
 
+void sendError(const char *message) {
+    printf("ERROR: \"%s\"\n", message);
+}
+
 void execCommand(JBCMD cmd)
 {
     // If strings are different then fail.
@@ -44,7 +48,7 @@ void execCommand(JBCMD cmd)
         changeWallpaper(cmd.args);
         break;
     case JB_SAVEWALL:
-        memcpy(wallpaper, cmd.args, 256);
+        memcpy(wallpaper, cmd.args, CMD_ARGSZ > MAX_PATH ? MAX_PATH : CMD_ARGSZ);   // Use the smaller value, 256 > 260 then use 256, 512 > 260 then use 260
         break;
     case JB_LOADWALL:
         if (!strcmp(wallpaper, BADPATH)) {
@@ -70,7 +74,9 @@ void execCommand(JBCMD cmd)
     case JB_CDEJECT:
 
         break;
-    case JB_POPUP:      /* TODO: Wide Character aware */
+    
+    /*
+    case JB_POPUPW:
         //wchar_t wideBuffer[CMD_ARGSZ * 2];
         //MultiByteToWideChar(CP_ACP, MB_COMPOSITE, cmd.args, CMD_ARGSZ, wideBuffer, CMD_ARGSZ * 2)
         char *arg1 = strtok(cmd.args, SEP);
@@ -92,6 +98,12 @@ void execCommand(JBCMD cmd)
         MessageBoxW(NULL, msg, wTitle, 0);
 
         free(msg);
+        break;
+    */
+    case JB_POPUPA:
+        char *arg1 = strtok(cmd.args, SEP);
+        char *arg2 = strtok(NULL, SEP);
+        MessageBoxA(NULL, arg1, arg2, 0);
         break;
     case JB_EXEC:
 

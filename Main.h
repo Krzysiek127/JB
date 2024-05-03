@@ -13,7 +13,10 @@
 
 #define PORT 2005
 #define SEP "\x03"
-#define CMD_ARGSZ 0x100
+#define SEPC '\x03'
+
+#define CMD_ARGSZ 512
+#define AUTH_LENGTH 24
 #define BADPATH "**BADPATH**"
 
 // pragma my nigga

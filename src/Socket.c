@@ -32,7 +32,7 @@ int UDPRecv(struct TeltharSocket *tsock, void *out, size_t maxlen) {
         printf("WSA error: %d", WSAGetLastError());
         return -1;
     }
-    assert(recvl == maxlen);
+    assert(recvl <= maxlen);
     
     return recvl;
 }
