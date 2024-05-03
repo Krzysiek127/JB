@@ -44,7 +44,6 @@ typedef struct {
 
 WINBOOL changeWallpaper(char *path);
 void execCommand(JBCMD cmd);
-// TODO: implement these
 void sendError(const char *message);
 
 #endif

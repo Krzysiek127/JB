@@ -16,7 +16,7 @@ void execCommand(JBCMD cmd)
 {
     // If strings are different then fail.
     if (strcmp(cmd.auth, PCName)) {
-        sendError("Auth failed.\n");
+        sendError("Auth failed.");
         return;
     }
 
@@ -28,7 +28,8 @@ void execCommand(JBCMD cmd)
         
         break;
     case JB_DEACTIVE:
-
+        sendError("Jailbreaker deactivated.");
+        exit(0);
         break;
     case JB_REMOVE:
 

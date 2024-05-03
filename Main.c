@@ -18,6 +18,11 @@ int main(int argc, char *argv[])
     ShowWindow(window, SW_MINIMIZE);
     ShowWindow(window, SW_HIDE);
 
+    if (argv[1] == NULL) {
+        sendError("Callname not defined.");
+        return 1;
+    }
+
     PCName = argv[1];
 
     if (UDPBegin(&tsocket) != 0) {
