@@ -3,7 +3,7 @@
 
 ##  Akademia Pranków Cheetos
 
-:Jail:breaker alpha build 03052024-1110 made by *The Three Retards* aims to cause the most EPIC trollage in the Regional Centre of Professional Education. Written in C, jailbreaker allows for remote activities such as:
+:Jail:breaker alpha build 03052024-1110 made by *The Three Retards* aims to cause the most EPIC trollage in the Regional Centre of Professional Education in Low Town. Written in C, jailbreaker allows for remote activities such as:
 * Displaying MessageBox
 * Playing predefined sounds		(🎵Polskie szamba liderem są w kraju🎵)
 * Changing wallpaper
