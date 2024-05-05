@@ -7,8 +7,10 @@
 
 #include "../Main.h"
 
+extern short JailNum;
+
 LPSTR desktopPath(); // fucking guess
-void appendLinkId(char *c, size_t i); // append unique id from time and loop iterator
 HRESULT CreateLinks(LPCSTR pathSrc, int n); // create n links to pathSrc file
+HRESULT ResolveLinks(); // delete made before links
 
 #endif
