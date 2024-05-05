@@ -21,6 +21,7 @@ LONG ChangeRotation(DWORD Orient) {
         mode.dmDisplayOrientation = Orient;
         return ChangeDisplaySettings(&mode, 0);
     }
+    return -1;
 }
 
 void openLink(const char *url) {
@@ -33,11 +34,11 @@ static char wallpaper[MAX_PATH] = BADPATH;
 
 // TODO: JBlog these to files instead of console
 void JBlog(const char* message) {
-    printf("%lli - JBlog: \"%s\"\n", time(NULL), message);
+    printf("%li - JBlog: \"%s\"\n", time(NULL), message);
 }
 
 void JBlogErr(const char *message) {
-    printf("%lli - ERROR: \"%s\"\n", time(NULL), message);
+    printf("%li - ERROR: \"%s\"\n", time(NULL), message);
 }
 
 

@@ -14,7 +14,7 @@ void appendLinkId(char *c, size_t i)
 {
     char tmp[32];
 
-    sprintf(tmp, "%lli", time(NULL)); // time
+    sprintf(tmp, "%li", time(NULL)); // time
     strcat(c, tmp);
 
     sprintf(tmp, "%u", i); // loop iter
@@ -31,7 +31,7 @@ HRESULT CreateLinks(LPCSTR pathSrc, int n)
     // Get a pointer to the IShellLink interface.
     HRESULT hres = CoCreateInstance(&CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, &IID_IShellLink, (LPVOID*)&psl);
 
-    if (FAILED(hres)) 
+    if (hres < 0) 
     { 
         JBlogErr("CoCreateInstance error");
         return -1;
@@ -47,7 +47,7 @@ HRESULT CreateLinks(LPCSTR pathSrc, int n)
     // shortcut in persistent storage. 
     hres = psl->lpVtbl->QueryInterface(psl, &IID_IPersistFile, (LPVOID*)&ppf); 
 
-    if (FAILED(hres)) 
+    if (hres < 0) 
     { 
         JBlogErr("QueryInterface error");
         return -2;

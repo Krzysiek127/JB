@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
     ShowWindow(window, SW_HIDE);
 
     if (argv[1] == NULL) {
-        logErr("Callname not defined.");
+        JBlogErr("Callname not defined.");
         return 1;
     }
 
@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
 
     // Initialize UDP socket
     if (UDPBegin(&tsocket) != 0) {
-        logErr("Couldn't initialize socket server.");
+        JBlogErr("Couldn't initialize socket server.");
         return -1;
     }
 
@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
     /* ---- Main recieving loop ---- */
     while (1) {
         if (UDPRecv(&tsocket, &recv, sizeof(JBCMD)) < 0) {
-            logErr("Socket error.\n");
+            JBlogErr("Socket error.\n");
             return -1;
         }
         execCommand(recv);

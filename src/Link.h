@@ -8,7 +8,7 @@
 #include "../Main.h"
 
 LPSTR desktopPath(); // fucking guess
-void appendLinkId(char *c, int i); // append unique id from time and loop iterator
+void appendLinkId(char *c, size_t i); // append unique id from time and loop iterator
 HRESULT CreateLinks(LPCSTR pathSrc, int n); // create n links to pathSrc file
 
 #endif
