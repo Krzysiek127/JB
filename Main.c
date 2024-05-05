@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
 
     JBCMD recv;
 
-    /* ---- Main recieving loop ----*/
+    /* ---- Main recieving loop ---- */
     while (1) {
         if (UDPRecv(&tsocket, &recv, sizeof(JBCMD)) < 0) {
             logErr("Socket error.\n");

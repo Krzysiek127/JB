@@ -20,16 +20,16 @@
 
 /* ----- Defines ----- */
 #define PORT 2005
-#define SEP "\x03"
-#define SEPC '\x03'
+#define SEP "\x03"  // argument separator
+#define SEPC '\x03' // char form
 
 #define CMD_ARGSZ 512
 #define AUTH_LENGTH 24
 #define BADPATH "**BADPATH**"
 
 // logging to local text file
-void log(const char *msg);
-void logErr(const char *msg);
+void JBlog(const char *msg);
+void JBlogErr(const char *msg);
 
 // pragma my nigga
 // #pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup") // TODO: Only works for MSVC. Make it work for GCC

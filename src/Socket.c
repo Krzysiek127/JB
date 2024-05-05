@@ -30,7 +30,12 @@ int UDPRecv(struct TeltharSocket *tsock, void *out, size_t maxlen) {
 
     int recvl;
     if ((recvl = recvfrom(tsock->sock, out, maxlen, 0, (struct sockaddr*)&tsock->si_other, &tsock->si_otherlen)) == SOCKET_ERROR) {
-        printf("WSA error: %d", WSAGetLastError());
+        char err[28] = "WSA error: ";
+        char errCode[32];
+        sprintf(errCode, "%d", WSAGetLastError());
+
+        strcat(err, errCode);
+        JBlogErr(err);
         return -1;
     }
     assert(recvl <= maxlen);

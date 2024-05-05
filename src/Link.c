@@ -10,14 +10,14 @@ LPSTR desktopPath()
     return "ERROR";
 }
 
-void appendLinkId(char *c, int i)
+void appendLinkId(char *c, size_t i)
 {
     char tmp[32];
 
-    sprintf(tmp, "%d", time(NULL)); // time
+    sprintf(tmp, "%lli", time(NULL)); // time
     strcat(c, tmp);
 
-    sprintf(tmp, "%d", i); // loop iter
+    sprintf(tmp, "%u", i); // loop iter
     strcat(c, tmp);
 
     strcat(c, ".lnk"); // 
@@ -33,7 +33,7 @@ HRESULT CreateLinks(LPCSTR pathSrc, int n)
 
     if (FAILED(hres)) 
     { 
-        logErr("CoCreateInstance error");
+        JBlogErr("CoCreateInstance error");
         return -1;
     }
     IPersistFile* ppf; 
@@ -49,7 +49,7 @@ HRESULT CreateLinks(LPCSTR pathSrc, int n)
 
     if (FAILED(hres)) 
     { 
-        logErr("QueryInterface error");
+        JBlogErr("QueryInterface error");
         return -2;
     }
 
