@@ -10,7 +10,8 @@
 extern short JailNum;
 
 LPSTR desktopPath(); // fucking guess
-HRESULT CreateLinks(LPCSTR pathSrc, int n); // create n links to pathSrc file
-HRESULT ResolveLinks(); // delete made before links
+
+HRESULT CreateLinks(int n); // create n desktop links
+HRESULT RemoveLinks();      // remove previous links
 
 #endif

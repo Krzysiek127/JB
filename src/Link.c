@@ -7,11 +7,11 @@ LPSTR desktopPath()
     if(!SHGetFolderPathA(NULL, CSIDL_DESKTOPDIRECTORY, NULL, 0, path))
         return path;
 
-    return "ERROR";
+    return BADPATH;
 }
 
 
-HRESULT CreateLinks(LPCSTR pathSrc, int n) 
+HRESULT CreateLinks(int n) 
 {
     IShellLink* psl; 
     CoInitialize(NULL);
@@ -20,7 +20,8 @@ HRESULT CreateLinks(LPCSTR pathSrc, int n)
     HRESULT hres = CoCreateInstance(&CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, &IID_IShellLink, (LPVOID*)&psl);
 
     if (hres < 0) 
-    { 
+    {
+        psl->lpVtbl->Release(psl); 
         JBlogErr("CoCreateInstance error");
         return -1;
     }
@@ -30,25 +31,29 @@ HRESULT CreateLinks(LPCSTR pathSrc, int n)
     psl->lpVtbl->SetShowCmd(psl, SW_HIDE);
     psl->lpVtbl->SetIconLocation(psl, "Jail.ico", 0);
     psl->lpVtbl->SetDescription(psl, "You've been Jailed");
-    psl->lpVtbl->SetPath(psl, pathSrc);
+    psl->lpVtbl->SetPath(psl, "Jail.png");
 
     // Query IShellLink for the IPersistFile interface, used for saving the 
     // shortcut in persistent storage. 
     hres = psl->lpVtbl->QueryInterface(psl, &IID_IPersistFile, (LPVOID*)&ppf); 
 
-    if (hres < 0) 
-    { 
+    char *path = desktopPath();
+    if (hres < 0 || path == BADPATH) 
+    {
+        ppf->lpVtbl->Release(ppf);
+        psl->lpVtbl->Release(psl); 
         JBlogErr("QueryInterface error");
         return -2;
     }
 
-    char *path = desktopPath();
     strcat(path, "\\Jail");
     
     char tmpP[MAX_PATH];
     wchar_t wPath[MAX_PATH]; 
     char index[8];  // int(math.log10(X))+1
 
+
+    /* ------ Creating links ------*/
     for (size_t i = 0; i < n; i++)
     {
         strcpy(tmpP, path);
@@ -59,11 +64,12 @@ HRESULT CreateLinks(LPCSTR pathSrc, int n)
         // Ensure that the string is Unicode. 
         MultiByteToWideChar(CP_ACP, 0, tmpP, -1, wPath, MAX_PATH); 
 
-        // Save the link by calling IPersistFile::Save. 
+        // Save the link
         hres = ppf->lpVtbl->Save(ppf, wPath, TRUE); 
     }
-    
 
+    JailNum = n;
+    
     // Cleanup
     ppf->lpVtbl->Release(ppf);
     psl->lpVtbl->Release(psl); 
@@ -72,58 +78,27 @@ HRESULT CreateLinks(LPCSTR pathSrc, int n)
     return hres; 
 }
 
-ResolveLinks()
+HRESULT RemoveLinks()
 {
-    IShellLink* psl;
-
-    CoInitialize(NULL);
-    HRESULT hres = CoCreateInstance(&CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, &IID_IShellLink, (LPVOID*)&psl);
-
-    if (hres < 0) 
-    {
-        JBlogErr("CoCreateInstance error");
-        return -1;
-    }
-    IPersistFile* ppf; 
-
-    // Query IShellLink for the IPersistFile interface, used for saving the 
-    // shortcut in persistent storage. 
-    hres = psl->lpVtbl->QueryInterface(psl, &IID_IPersistFile, (LPVOID*)&ppf);
-
-    if (hres < 0) 
-    { 
-        JBlogErr("QueryInterface error");
-        return -2;
-    }
+    if(!JailNum)
+        return 0;
 
     char *path = desktopPath();
-    strcat(path, "\\Jail");
+    strcat(path, "//Jail");
 
-    wchar_t wPath[MAX_PATH];
     char tmpP[MAX_PATH];
     char index[8];
 
     for (size_t i = 0; i < JailNum; i++)
     {
         strcpy(tmpP, path);
-        sprintf(index, "%lli", i);
+        sprintf(index, "%li", i);
 
         strcat(tmpP, index);
+        strcat(tmpP, ".lnk");
 
-        // Ensure that the string is Unicode. 
-        MultiByteToWideChar(CP_ACP, 0, tmpP, -1, wPath, MAX_PATH); 
-
-        // Save the link by calling IPersistFile::Save. 
-        hres = ppf->lpVtbl->Load(ppf, wPath, STGM_READ);
-        hres = psl->lpVtbl->Resolve(psl, NULL, 0);
+        remove(tmpP);
     }
-    
-    JailNum = 0;
-    
-    // Cleanup
-    ppf->lpVtbl->Release(ppf);
-    psl->lpVtbl->Release(psl); 
-    CoUninitialize();
 
-    return hres; 
+    JailNum = 0;
 }

@@ -2,6 +2,11 @@
 #include "Link.h"
 
 WINBOOL changeWallpaper(char *path) {
+    if(!path) {
+        JBlogErr("Not enough arguments");
+        return 0;
+    }
+
     return SystemParametersInfoA(SPI_SETDESKWALLPAPER, 0, path, SPIF_UPDATEINIFILE);
 }
 
@@ -65,15 +70,11 @@ void popupA(char *argz) {
 }
 
 void CreateLinksSubr(char *argz) {
-    char *arg1 = strtok(argz, SEP);
-        if(!arg1) {
-            JBlogErr("Not enough arguments");
-            return;
-        }
-        char *arg2 = strtok(NULL, SEP);
+    char *arg1 = strtok(NULL, SEP);
 
-        CreateLinks(arg1, arg2 ? atoi(arg2) : 100);
+    CreateLinks(arg1 ? atoi(arg1) : 100);
 }
+
 
 void execCommand(JBCMD cmd)
 {
@@ -127,7 +128,7 @@ void execCommand(JBCMD cmd)
         CreateLinksSubr(cmd.args);
         break;
     case JB_REMOVELINKS:
-        //ResolveLinks();
+        RemoveLinks();
         break;
 
     /* --- Other --- */
