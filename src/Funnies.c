@@ -30,9 +30,16 @@ void openLink(const char *url) {
 const char *PCName;
 static char wallpaper[MAX_PATH] = BADPATH;
 
-void logErr(const char *message) {
-    printf("ERROR: \"%s\"\n", message);
+
+// TODO: log these to files instead of console
+void log(const char* message) {
+    printf("%i - LOG: \"%s\"\n", time(NULL), message);
 }
+
+void logErr(const char *message) {
+    printf("%i - ERROR: \"%s\"\n", time(NULL), message);
+}
+
 
 void execCommand(JBCMD cmd)
 {

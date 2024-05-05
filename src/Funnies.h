@@ -41,6 +41,6 @@ typedef struct {
 
 //WINBOOL changeWallpaper(char *path);  // I think we don't need to expose it
 
-void execCommand(JBCMD cmd);
+void execCommand(JBCMD cmd); // star of the show
 
 #endif

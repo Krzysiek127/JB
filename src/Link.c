@@ -20,11 +20,11 @@ void appendLinkId(char *c, int i)
     sprintf(tmp, "%d", i); // loop iter
     strcat(c, tmp);
 
-    strcat(c, ".lnk");
+    strcat(c, ".lnk"); // 
 }
 
 HRESULT CreateLinks(LPCSTR pathSrc, int n) 
-{ 
+{
     IShellLink* psl; 
     CoInitialize(NULL);
 

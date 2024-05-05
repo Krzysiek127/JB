@@ -1,7 +1,10 @@
 #ifndef HEADER
 #define HEADER
 
-#define _WIN32_WINIT_ 0x0A00
+#pragma once
+
+#define _WIN32_WINIT_ 0x0A00 // needed for windows shlop
+
 
 #include <winsock2.h>
 #include <windows.h>
@@ -15,6 +18,7 @@
 #include <shlobj.h>
 
 
+/* ----- Defines ----- */
 #define PORT 2005
 #define SEP "\x03"
 #define SEPC '\x03'
@@ -23,9 +27,10 @@
 #define AUTH_LENGTH 24
 #define BADPATH "**BADPATH**"
 
+// logging to local text file
 void log(const char *msg);
 void logErr(const char *msg);
 
 // pragma my nigga
-//#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup") // TODO: Only works for MSVC. Make it work for GCC
+// #pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup") // TODO: Only works for MSVC. Make it work for GCC
 #endif

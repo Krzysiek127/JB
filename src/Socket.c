@@ -1,6 +1,7 @@
 #include "Socket.h"
 #include <stdio.h>
 
+// i aint commenting this shit
 
 int UDPBegin(struct TeltharSocket *tsock) {
     tsock->si_otherlen = sizeof(tsock->si_other);
