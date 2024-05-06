@@ -78,10 +78,10 @@ HRESULT CreateLinks(int n)
     return hres; 
 }
 
-HRESULT RemoveLinks()
+void RemoveLinks()
 {
     if(!JailNum)
-        return 0;
+        return;
 
     char *path = desktopPath();
     strcat(path, "//Jail");
