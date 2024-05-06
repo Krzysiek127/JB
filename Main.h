@@ -3,12 +3,12 @@
 
 #pragma once
 
-#define _WIN32_WINIT_ 0x0A00 // needed for windows shlop
+#define _WIN32_WINIT 0x0A00 // needed for windows shlop
 
-
+//#include <winslop.h>
 #include <winsock2.h>
 #include <windows.h>
-#include <winuser.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -21,9 +21,9 @@
 /* ----- Defines ----- */
 #define PORT 2005
 #define SEP "\x03"  // argument separator
-#define SEPL L"\x03"
-
 #define SEPC '\x03' // char form
+#define SEPL L'\x03'// wchar form
+
 
 #define CMD_ARGSZ 512
 #define AUTH_LENGTH 24

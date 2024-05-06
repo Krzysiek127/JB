@@ -2,12 +2,10 @@
 #define LINK
 
 // use libs needed for shell links
-#pragma comment(lib, "ole32.lib")
-#pragma comment(lib, "uuid.lib")
+//#pragma comment(lib, "ole32.lib")
+//#pragma comment(lib, "uuid.lib")
 
 #include "../Main.h"
-
-extern short JailNum;
 
 LPSTR desktopPath(); // fucking guess
 

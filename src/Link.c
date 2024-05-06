@@ -10,6 +10,7 @@ LPSTR desktopPath()
     return BADPATH;
 }
 
+static u_int JailNum = 0;
 
 HRESULT CreateLinks(int n) 
 {
@@ -38,7 +39,7 @@ HRESULT CreateLinks(int n)
     hres = psl->lpVtbl->QueryInterface(psl, &IID_IPersistFile, (LPVOID*)&ppf); 
 
     char *path = desktopPath();
-    if (hres < 0 || path == BADPATH) 
+    if (hres < 0 || !strcmp(path, BADPATH)) 
     {
         ppf->lpVtbl->Release(ppf);
         psl->lpVtbl->Release(psl); 
@@ -50,8 +51,7 @@ HRESULT CreateLinks(int n)
     
     char tmpP[MAX_PATH];
     wchar_t wPath[MAX_PATH]; 
-    char index[8];  // int(math.log10(X))+1
-
+    char index[8];
 
     /* ------ Creating links ------*/
     for (size_t i = 0; i < n; i++)
@@ -61,7 +61,7 @@ HRESULT CreateLinks(int n)
 
         strcat(tmpP, index);
 
-        // Ensure that the string is Unicode. 
+        // Ensure that the string is Unicode (conv to  wchar)
         MultiByteToWideChar(CP_ACP, 0, tmpP, -1, wPath, MAX_PATH); 
 
         // Save the link
@@ -89,13 +89,14 @@ HRESULT RemoveLinks()
     char tmpP[MAX_PATH];
     char index[8];
 
+    /* ------ Removing links ------*/
     for (size_t i = 0; i < JailNum; i++)
     {
         strcpy(tmpP, path);
-        sprintf(index, "%li", i);
+        sprintf(index, "%lli", i); 
 
-        strcat(tmpP, index);
-        strcat(tmpP, ".lnk");
+        strcat(tmpP, index); // append loop num to name
+        strcat(tmpP, ".lnk");// append file extension
 
         remove(tmpP);
     }

@@ -21,7 +21,7 @@ LONG ChangeRotation(DWORD Orient) {
     DEVMODE mode;
 
     EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &mode);
-    if (mode.dmFields | DM_DISPLAYORIENTATION) // DM_ORIENTATION ?
+    if (mode.dmFields | DM_DISPLAYORIENTATION)
     {
         mode.dmDisplayOrientation = Orient;
         return ChangeDisplaySettings(&mode, 0);
@@ -37,7 +37,7 @@ const char *PCName;
 static char wallpaper[MAX_PATH] = BADPATH;
 
 
-// TODO: JBlog these to files instead of console
+// TODO: log these to files instead of console
 void JBlog(const char* message) {
     printf("%lli - JBlog: \"%s\"\n", time(NULL), message);
 }
@@ -48,23 +48,28 @@ void JBlogErr(const char *message) {
 
 
 void popupW(char *argz) {
-    wchar_t *arg1 = wcstok((wchar_t *)argz, SEPL);
+    wchar_t wargz[CMD_ARGSZ];
+    MultiByteToWideChar(CP_ACP, 0, argz, -1, wargz, CMD_ARGSZ); // turn argz to wchar and put it in wargz
+
+    wchar_t *arg1 = wcstok(wargz, SEPL);
+    wchar_t *arg2 = wcstok(NULL, SEPL);
+
     if(!arg1) {
         JBlogErr("Not enough arguments");
         return;
     }
 
-    wchar_t *arg2 = wcstok(NULL, SEPL);
     MessageBoxW(NULL, arg1, arg2 ? arg2 : L"JB", 0);
 }
 
 void popupA(char *argz) {
     char *arg1 = strtok(argz, SEP);
+    char *arg2 = strtok(NULL, SEP);
+    
     if(!arg1) {
         JBlogErr("Not enough arguments");
         return;
     }
-    char *arg2 = strtok(NULL, SEP);
 
     MessageBoxA(NULL, arg1, arg2 ? arg2 : "JB", 0);
 }
