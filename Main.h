@@ -22,7 +22,7 @@
 #define PORT 2005
 #define SEP "\x03"  // argument separator
 #define SEPC '\x03' // char form
-#define SEPL L'\x03'// wchar form
+#define SEPL L"x03" // wchar form
 
 
 #define CMD_ARGSZ 512

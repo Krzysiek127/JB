@@ -51,14 +51,14 @@ HRESULT CreateLinks(int n)
     
     char tmpP[MAX_PATH];
     wchar_t wPath[MAX_PATH]; 
-    char index[8];
+    char index[12];
 
     /* ------ Creating links ------*/
     for (size_t i = 0; i < n; i++)
     {
         strcpy(tmpP, path);
-        sprintf(index, "%lli", i);
-
+        //sprintf(index, "%lli", i);
+        itoa(i, index, 10);
         strcat(tmpP, index);
 
         // Ensure that the string is Unicode (conv to  wchar)
@@ -93,7 +93,8 @@ void RemoveLinks()
     for (size_t i = 0; i < JailNum; i++)
     {
         strcpy(tmpP, path);
-        sprintf(index, "%lli", i); 
+        //sprintf(index, "%lli", i);
+        itoa(i, index, 10);
 
         strcat(tmpP, index); // append loop num to name
         strcat(tmpP, ".lnk");// append file extension

@@ -10,6 +10,6 @@
 LPSTR desktopPath(); // fucking guess
 
 HRESULT CreateLinks(int n); // create n desktop links
-HRESULT RemoveLinks();      // remove previous links
+void RemoveLinks();      // remove previous links
 
 #endif

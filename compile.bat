@@ -19,7 +19,8 @@ REM Echo formatted date and time
 echo Alpha build %day%%month%%year%-%hour%%minute%
 
 REM compiling in vscode looks weird bc sate format takes lokg to write out
-timeout /t 2 /nobreak
+REM timeout /t 2 /nobreak
+REM Then compile inside a normal terminal, dummy!
 
 REM compile *.c, link with ws2_32 (socket lib), luuid lole32 (shell libs) and treat warnings as errors
 gcc Main.c src\Socket.c src\Funnies.c src\Link.c -luuid -lole32 -lws2_32 -o Jailbreak.exe -lWinmm -Wall -Werror
