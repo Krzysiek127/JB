@@ -18,14 +18,18 @@
 #include <assert.h>
 #include <shlobj.h>
 #include <wchar.h>
+#include <tchar.h>
+#include <locale.h>
+#include <mbstring.h>
 
+// Please for the love of god DO NOT UNCOMMENT THIS UNHOLY LINE
+//#define TELTHAR_STUPID_WIDE_CHAR    LOCALE_ALL
 
 /* ----- Defines ----- */
 #define PORT 2005
 #define SEP "\x03"  // argument separator
 #define SEPC '\x03' // char form
 #define SEPL L"\x03" // wchar form
-
 
 #define CMD_ARGSZ 512
 #define AUTH_LENGTH 24

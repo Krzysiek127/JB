@@ -30,9 +30,9 @@ HRESULT CreateLinks(int n)
 
     // Set the Shortcut parameters
     psl->lpVtbl->SetShowCmd(psl, SW_HIDE);
-    psl->lpVtbl->SetIconLocation(psl, "Jail.ico", 0);
+    psl->lpVtbl->SetIconLocation(psl, "res\\Jail.ico", 0);
     psl->lpVtbl->SetDescription(psl, "You've been Jailed");
-    psl->lpVtbl->SetPath(psl, "Jail.png");
+    psl->lpVtbl->SetPath(psl, "C:\\Windows\\Media\\onestop.mid");
 
     // Query IShellLink for the IPersistFile interface, used for saving the 
     // shortcut in persistent storage. 

