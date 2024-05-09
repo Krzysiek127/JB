@@ -4,6 +4,7 @@
 #pragma once
 
 #define _WIN32_WINIT 0x0A00 // needed for windows shlop
+#define WINVER 0xA00 // same dog different shit
 
 //#include <winslop.h>
 #include <winsock2.h>

