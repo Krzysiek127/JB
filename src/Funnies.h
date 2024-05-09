@@ -10,7 +10,7 @@
 
     --optional arguments are market with -opt
     --instructions with no args have (void)
-    --i:arg - iteger,  s:arg - string
+    --i:arg -> integer,  s:arg -> string
     -- -WIP -> Work In Progress
 
     JB_FUN      (void)

