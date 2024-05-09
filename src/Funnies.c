@@ -12,7 +12,6 @@ WINBOOL changeWallpaper(char *img) {
 
     return SystemParametersInfoA(SPI_SETDESKWALLPAPER, 0, path, SPIF_UPDATEINIFILE);
 }
-
 /*
 Use DMDO_X macro or number between 0 - 3 (inclusive)
     Default - 0
@@ -23,7 +22,7 @@ Use DMDO_X macro or number between 0 - 3 (inclusive)
 LONG ChangeRotation(DWORD Orient) {
     DEVMODE mode;
 
-    EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &mode);
+    EnumDisplaySettingsA(NULL, ENUM_CURRENT_SETTINGS, &mode);
     if (mode.dmFields | DM_DISPLAYORIENTATION)
     {
         mode.dmDisplayOrientation = Orient;
@@ -32,6 +31,7 @@ LONG ChangeRotation(DWORD Orient) {
     return -1;
 }
 
+
 void openLink(const char *site) {
     char url[256] = "www."; // i aint typin' www. everytime
     strcat(url, site);
@@ -39,29 +39,20 @@ void openLink(const char *site) {
     ShellExecuteA(NULL, "open", url, NULL, NULL, SW_HIDE);
 }
 
+
 const char *PCName;
 static char wallpaper[MAX_PATH] = BADPATH;
 
-
-// TODO: log these to files instead of console
-void JBlog(const char* message) {
-    printf("%lli - JBlog: \"%s\"\n", time(NULL), message);
-}
-
-void JBlogErr(const char *message) {
-    printf("%lli - ERROR: \"%s\"\n", time(NULL), message);
-}
-
-
 void popupW(char *argz) {
     wchar_t wargz[CMD_ARGSZ];
-    MultiByteToWideChar(CP_ACP, 0, argz, -1, wargz, CMD_ARGSZ); // turn argz to wchar and put it in wargz
 
+    MultiByteToWideChar(CP_UTF8, 0, argz, -1, wargz, CMD_ARGSZ); // turn argz to wchar and put it in wargz
+    
     wchar_t *arg1 = wcstok(wargz, SEPL);
     wchar_t *arg2 = wcstok(NULL, SEPL);
-
+    
     if(!arg1) {
-        JBlogErr("Not enough arguments");
+        JBlog("Not enough arguments");
         return;
     }
 
@@ -84,7 +75,6 @@ void popupA(char *argz) {
 
 void CreateLinksSubr(char *argz) {
     char *arg1 = strtok(NULL, SEP);
-
     CreateLinks(arg1 ? atoi(arg1) : 100);
 }
 
@@ -102,8 +92,8 @@ void execCommand(JBCMD cmd)
     /* --- Templates --- */
     case JB_FUN:
         CreateLinks(180);
-        changeWallpaper("jail.png");
-        PlaySound("Stalker.mp3", NULL, SND_FILENAME | SND_ASYNC);
+        changeWallpaper("res\\jail.png");
+        PlaySound("res\\Stalker.mp3", NULL, SND_FILENAME | SND_ASYNC);
         break;
     case JB_DEACTIVE:
         JBlog("Jailbreaker deactivated.");
@@ -127,7 +117,7 @@ void execCommand(JBCMD cmd)
         changeWallpaper(cmd.args);
         break;
     case JB_SAVEWALL:
-        memcpy(wallpaper, cmd.args, CMD_ARGSZ > MAX_PATH ? MAX_PATH : CMD_ARGSZ);   // Use the smaller value, 256 > 260 then use 256, 512 > 260 then use 260
+        memcpy(wallpaper, cmd.args, CMD_ARGSZ > MAX_PATH ? MAX_PATH : CMD_ARGSZ);   // Use the smaller value, 256 < 260 then use 256, 512 > 260 then use 260
         break;
     case JB_LOADWALL:
         if (!strcmp(wallpaper, BADPATH)) {

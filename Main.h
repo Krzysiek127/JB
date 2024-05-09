@@ -17,13 +17,14 @@
 #include <time.h>
 #include <assert.h>
 #include <shlobj.h>
+#include <wchar.h>
 
 
 /* ----- Defines ----- */
 #define PORT 2005
 #define SEP "\x03"  // argument separator
 #define SEPC '\x03' // char form
-#define SEPL L"x03" // wchar form
+#define SEPL L"\x03" // wchar form
 
 
 #define CMD_ARGSZ 512
@@ -36,4 +37,10 @@ void JBlogErr(const char *msg);
 
 // pragma my nigga
 // #pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup") // TODO: Only works for MSVC. Make it work for GCC
+void hexDump (
+    const char *desc,
+    const void *addr,
+    const int len,
+    int perLine
+);
 #endif
