@@ -39,8 +39,11 @@ int UDPRecv(struct TeltharSocket *tsock, void *out, size_t maxlen) {
         return -1;
     }
     assert(recvl <= maxlen);
-    
     return recvl;
+}
+
+int UDPRespond(struct TeltharSocket *tsock, void *out, size_t len) {
+    return recvfrom(tsock->sock, out, len, 0, (struct sockaddr*)&tsock->si_other, &tsock->si_otherlen);
 }
 
 void UDPClose(struct TeltharSocket *tsock) {
