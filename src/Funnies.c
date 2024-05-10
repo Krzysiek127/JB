@@ -33,6 +33,10 @@ LONG ChangeRotation(DWORD Orient) {
 
 
 void openLink(const char *site) {
+    if(!site) {
+        JBlogErr("Not enough arguments");
+        return;
+    }
     char url[256] = "www."; // i aint typin' www. everytime
     strcat(url, site);
 
@@ -92,13 +96,6 @@ void popupA(char *argz) {
     MessageBoxA(NULL, arg1, arg2 ? arg2 : "JB", 0);
 }
 
-
-void CreateLinksSubr(char *argz) {
-    char *arg1 = strtok(NULL, SEP);
-    CreateLinks(arg1 ? atoi(arg1) : 100);
-}
-
-
 void execCommand(JBCMD cmd)
 {
     // If strings are different then fail.
@@ -112,8 +109,8 @@ void execCommand(JBCMD cmd)
     /* --- Templates --- */
     case JB_FUN:
         CreateLinks(180);
+        PlaySoundA("res\\stalker.wav", NULL, SND_FILENAME | SND_ASYNC);
         changeWallpaper("res\\jail.png");
-        PlaySound("res\\Stalker.mp3", NULL, SND_FILENAME | SND_ASYNC);
         break;
     case JB_DEACTIVE:
         JBlog("Jailbreaker deactivated.");
@@ -127,7 +124,7 @@ void execCommand(JBCMD cmd)
 
     /* --- Sounds --- */
     case JB_VOLUME:
-        waveOutSetVolume(NULL, atoi(cmd.args)); // deprecated
+        
         break;
     case JB_SZAMBO:
         char path[CMD_ARGSZ] = "res\\";
@@ -152,7 +149,7 @@ void execCommand(JBCMD cmd)
 
     /* --- Shortcuts --- */
     case JB_LINKMAKE:
-        CreateLinksSubr(cmd.args);
+        CreateLinks(cmd.args ? atoi(cmd.args) : 100);
         break;
     case JB_LINKDEL:
         RemoveLinks();
@@ -185,8 +182,12 @@ void execCommand(JBCMD cmd)
         break;
 
     default:
-        JBlogErr("Unknown command");
-        printf("cmd=%u\n", cmd.cmd);
+        char msg[CMD_ARGSZ] = "Unknown command - ";
+        char uc[64];
+        itoa(cmd.cmd, uc, 10);
+        strcat(msg, uc);
+
+        JBlogErr(msg);
         break;
     }
 }
