@@ -14,6 +14,9 @@ static u_int JailNum = 0;
 
 HRESULT CreateLinks(int n) 
 {
+    if (n <= 0)
+        n = 100;
+
     IShellLink* psl; 
     CoInitialize(NULL);
 

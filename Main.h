@@ -32,8 +32,14 @@
 #define SEPL L"\x03" // wchar form
 
 #define CMD_ARGSZ 512
-#define AUTH_LENGTH 24
+#define AUTH_LENGTH 32 // powers of 2 nigga
 #define BADPATH "**BADPATH**"
+
+#ifdef APPCOMMAND_VOLUME_UP // weird compiler shenanigans
+#undef APPCOMMAND_VOLUME_UP
+#undef APPCOMMAND_VOLUME_DOWN
+#endif
+
 #define APPCOMMAND_VOLUME_UP 0xA0000 // volume 100
 #define APPCOMMAND_VOLUME_DOWN 0x90000 // volume 0
 

@@ -9,7 +9,7 @@
 
 // TODO: log these to files instead of console
 void JBlog(const char* message) {
-    printf("%lli - JBlog: \"%s\"\n", time(NULL), message);
+    printf("%lli - \"%s\"\n", time(NULL), message);
 }
 
 void JBlogErr(const char *message) {
@@ -109,6 +109,7 @@ int main(int argc, char *argv[])
     }
 
     JBCMD recv;
+    recv.args[0] = 0; // set first bit to 0 for easier arg checking
 
     /* ---- Main recieving loop ---- */
     while (1) {
