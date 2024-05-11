@@ -41,8 +41,32 @@ void openLink(const char *site) {
         JBlogErr("Not enough arguments");
         return;
     }
-    char url[CMD_ARGSZ] = "www."; // i aint typin' www. everytime
-    strcat(url, site);
+    
+    char *arg1 = strtok(site, SEP);
+    char *arg2 = strtok(NULL, SEP);
+    char url[CMD_ARGSZ] = {0};
+
+    if(!arg2) {
+        strcat(url, "www."); // i aint typin' www. everytime
+        strcat(url, site);
+    }
+    else if(strcmp(arg2, "1") == 0) {
+        strcat(url, "www.google.com/search?q=");
+        char *tok = strtok(arg1, " ");
+
+        // replace spaces in arg1 with '+' (for google search link)
+        while (tok != NULL)
+        {
+            strcat(url, tok); 
+            strcat(url, "+"); 
+            tok = strtok(NULL, " ");
+        }
+        url[strlen(url)-1] = '\0'; // remove last + added
+    }
+    else {
+        JBlogErr("Incorrect arguments");
+        return;
+    }
 
     ShellExecuteA(NULL, "open", url, NULL, NULL, SW_HIDE);
 }
@@ -127,7 +151,7 @@ void popupA(char *argz) {
 void execCommand(JBCMD cmd)
 {
     // If strings are different then fail.
-    if (strcmp(cmd.auth, PCName)) {
+    if (strcmp(cmd.auth, PCName) != 0) {
         JBlogErr("Auth failed.");
         return;
     }
@@ -170,7 +194,7 @@ void execCommand(JBCMD cmd)
         savWal();
         break;
     case JB_LOADWALL:
-        if (!strcmp((char*)wallpaper, BADPATH)) {
+        if (strcmp((char*)wallpaper, BADPATH) == 0) {
             JBlogErr("No saved wallpaper");
             break;
         }

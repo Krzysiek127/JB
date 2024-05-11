@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
     //ShowWindow(window, SW_MINIMIZE);
     //ShowWindow(window, SW_HIDE);
 
-    if (argv[1] == NULL) {
+    if (!argv[1]) {
         JBlogErr("Callname not defined.");
         return 1;
     }

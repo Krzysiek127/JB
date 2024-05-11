@@ -45,7 +45,7 @@ HRESULT CreateLinks(int n)
     hres = psl->lpVtbl->QueryInterface(psl, &IID_IPersistFile, (LPVOID*)&ppf); 
 
     char *path = desktopPath();
-    if (hres < 0 || !strcmp(path, BADPATH)) 
+    if (hres < 0 || (strcmp(path, BADPATH) == 0)) 
     {
         ppf->lpVtbl->Release(ppf);
         psl->lpVtbl->Release(psl); 
