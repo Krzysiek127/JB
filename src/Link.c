@@ -35,6 +35,7 @@ HRESULT CreateLinks(int n)
     psl->lpVtbl->SetShowCmd(psl, SW_HIDE);
     char dir[MAX_PATH];
     getcwd(dir, MAX_PATH);
+    strcat(dir, "\\res\\jail.ico");
     psl->lpVtbl->SetIconLocation(psl, dir, 0);
     psl->lpVtbl->SetDescription(psl, "You've been Jailed");
     psl->lpVtbl->SetPath(psl, "C:\\Windows\\Media\\onestop.mid");

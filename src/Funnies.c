@@ -7,11 +7,13 @@ void changeWallpaper(const char *img) {
         return;
     }
 
-    char path[CMD_ARGSZ] = "res\\";
+    char path[CMD_ARGSZ];
+    getcwd(path, CMD_ARGSZ);
+    strcat(path, "\\res\\");
     strcat(path, img);
     strcat(path, ".png");
 
-    if(SystemParametersInfoA(SPI_SETDESKWALLPAPER, 0, path, SPIF_UPDATEINIFILE))
+    if(!SystemParametersInfoA(SPI_SETDESKWALLPAPER, 0, path, SPIF_UPDATEINIFILE))
         JBlogErr("Could not change wallpaper");
 }
 /*
@@ -48,6 +50,15 @@ void openLink(const char *site) {
 
 const char *PCName;
 static byte wallpaper[MAX_PATH] = BADPATH;
+
+void savWal()
+{
+    HKEY k;
+    RegOpenKeyExA(HKEY_CURRENT_USER, "Control Panel\\Desktop", 0, KEY_QUERY_VALUE , &k);
+    if(!RegQueryValueExA(k, "WallPaper", NULL, NULL, wallpaper, NULL))
+        JBlogErr("Could not save wallpaper");
+    RegCloseKey(k);
+}
 
 void play(const char *src) {
     if (src[0] == '\0') {
@@ -155,14 +166,14 @@ void execCommand(JBCMD cmd)
         changeWallpaper(cmd.args);
         break;
     case JB_SAVEWALL:
-        RegQueryValueExA(HKEY_CURRENT_USER, "\\Control Panel\\Desktop", NULL, NULL, wallpaper, NULL);
+        savWal();
         break;
     case JB_LOADWALL:
-        if (!strcmp(wallpaper, BADPATH)) {
+        if (!strcmp((char*)wallpaper, BADPATH)) {
             JBlogErr("No saved wallpaper");
             break;
         }
-        changeWallpaper(wallpaper);
+        SystemParametersInfoA(SPI_SETDESKWALLPAPER, 0, (void*)wallpaper, SPIF_UPDATEINIFILE);
         break;
 
     /* --- Shortcuts --- */
