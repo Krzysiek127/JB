@@ -34,6 +34,8 @@
 #define CMD_ARGSZ 512
 #define AUTH_LENGTH 24
 #define BADPATH "**BADPATH**"
+#define APPCOMMAND_VOLUME_UP 0xA0000 // volume 100
+#define APPCOMMAND_VOLUME_DOWN 0x90000 // volume 0
 
 // logging to local text file
 void JBlog(const char *msg);

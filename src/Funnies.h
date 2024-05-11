@@ -15,9 +15,10 @@
 
     JB_FUN      (void)
     JB_DEACTIVE (void)
-    JB_REMOVE   (void)  -WIP 
+    JB_REMOVE   (void)
 
-    JB_VOLUME   [i:vol] -WIP
+    JB_VOLUME   (void)
+    JB_MUTE     (void)
     JB_SZAMBO   [s:soundFile]
 
     JB_SETWALL  [s:walpPath]
@@ -43,8 +44,9 @@ typedef enum {
     JB_DEACTIVE,    // Deactive jailbraker
     JB_REMOVE,      // Delete from pc completely
 
-    /* --- Sounds --- */
-    JB_VOLUME,      // set system volume
+    /* --- Audio --- */
+    JB_VOLUME,      // unmute and set system volume to 100
+    JB_MUTE,        // set volume to 0
     JB_SZAMBO,      // play sound
 
     /* --- Wallpaper --- */

