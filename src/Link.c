@@ -33,7 +33,7 @@ HRESULT CreateLinks(int n)
 
     // Set the Shortcut parameters
     psl->lpVtbl->SetShowCmd(psl, SW_HIDE);
-    psl->lpVtbl->SetIconLocation(psl, "res\\Jail.ico", 0);
+    psl->lpVtbl->SetIconLocation(psl, "res\\jail.ico", 0);
     psl->lpVtbl->SetDescription(psl, "You've been Jailed");
     psl->lpVtbl->SetPath(psl, "C:\\Windows\\Media\\onestop.mid");
 
@@ -63,6 +63,7 @@ HRESULT CreateLinks(int n)
         //sprintf(index, "%lli", i);
         itoa(i, index, 10);
         strcat(tmpP, index);
+        strcat(tmpP, ".lnk");
 
         // Ensure that the string is Unicode (conv to  wchar)
         MultiByteToWideChar(CP_ACP, 0, tmpP, -1, wPath, MAX_PATH); 
