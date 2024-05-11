@@ -91,9 +91,9 @@ void hexDump (
 int main(int argc, char *argv[])
 {
     // Hide console
-    HWND window = GetConsoleWindow();
-    ShowWindow(window, SW_MINIMIZE);
-    ShowWindow(window, SW_HIDE);
+    //HWND window = GetConsoleWindow();
+    //ShowWindow(window, SW_MINIMIZE);
+    //ShowWindow(window, SW_HIDE);
 
     if (argv[1] == NULL) {
         JBlogErr("Callname not defined.");
@@ -109,7 +109,6 @@ int main(int argc, char *argv[])
     }
 
     JBCMD recv;
-    recv.args[0] = 0; // set first bit to 0 for easier arg checking
 
     /* ---- Main recieving loop ---- */
     while (1) {

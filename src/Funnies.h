@@ -40,8 +40,8 @@
 
 typedef enum {
     /* --- Templates --- */
-    JB_FUN,         // FUN
     JB_DEACTIVE,    // Deactive jailbraker
+    JB_FUN,         // FUN
     JB_REMOVE,      // Delete from pc completely
 
     /* --- Audio --- */

