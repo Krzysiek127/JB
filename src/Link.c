@@ -33,7 +33,9 @@ HRESULT CreateLinks(int n)
 
     // Set the Shortcut parameters
     psl->lpVtbl->SetShowCmd(psl, SW_HIDE);
-    psl->lpVtbl->SetIconLocation(psl, "res\\jail.ico", 0);
+    char dir[MAX_PATH];
+    getcwd(dir, MAX_PATH);
+    psl->lpVtbl->SetIconLocation(psl, dir, 0);
     psl->lpVtbl->SetDescription(psl, "You've been Jailed");
     psl->lpVtbl->SetPath(psl, "C:\\Windows\\Media\\onestop.mid");
 

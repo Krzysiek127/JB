@@ -13,8 +13,8 @@
     --i:arg -> integer,  s:arg -> string
     -- -WIP -> Work In Progress
 
-    JB_FUN      (void)
     JB_DEACTIVE (void)
+    JB_FUN      (void)
     JB_REMOVE   (void)
 
     JB_VOLUME   (void)
