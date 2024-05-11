@@ -4,7 +4,7 @@
 void changeWallpaper(const char *img) {
     if(!img[0]) {
         JBlogErr("Not enough arguments");
-        return 0;
+        return;
     }
 
     char path[MAX_PATH] = "res\\";
@@ -27,7 +27,7 @@ LONG ChangeRotation(DWORD Orient) {
     if (mode.dmFields | DM_DISPLAYORIENTATION)
     {
         mode.dmDisplayOrientation = Orient;
-        return ChangeDisplaySettingsW(&mode, 0);
+        return ChangeDisplaySettingsA(&mode, 0);
     }
     return -1;
 }
@@ -61,7 +61,7 @@ void play(const char *src) {
         JBlogErr("Could not play audio");
 }
 
-void popupW(const char *argz) {
+void popupW(char *argz) {
     if (!argz[0] == 0) {
         JBlogErr("Not enough arguments");
         return;
@@ -97,7 +97,7 @@ void popupW(const char *argz) {
 }
 
 
-void popupA(const char *argz) {
+void popupA(char *argz) {
     if(!argz[0]) {
         JBlogErr("Not enough arguments");
         return;
