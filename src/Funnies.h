@@ -13,29 +13,29 @@
     --i:arg -> integer,  s:arg -> string
     -- -WIP -> Work In Progress
 
-    JB_DEACTIVE (void)
-    JB_FUN      (void)
-    JB_REMOVE   (void)
+    0.  JB_DEACTIVE (void)
+    1.  JB_FUN      (void)
+    2.  JB_REMOVE   (void)
 
-    JB_VOLUME   (void)
-    JB_MUTE     (void)
-    JB_SZAMBO   [s:soundFile]
+    3.  JB_VOLUME   (void)
+    4.  JB_MUTE     (void)
+    5.  JB_SZAMBO   [s:soundFile]
 
-    JB_SETWALL  [s:walpPath]
-    JB_SAVEWALL (void)
-    JB_LOADWALL (void)
+    6.  JB_SETWALL  [s:walpPath]
+    7.  JB_SAVEWALL (void)
+    8.  JB_LOADWALL (void)
 
-    JB_LINKMAKE [i:linkCount-opt def:100]
-    JB_LINKDEL  (void)
+    9.  JB_LINKMAKE [i:linkCount-opt def:100]
+    10. JB_LINKDEL  (void)
 
-    JB_OPENWEB  [s:site] [i:googleSearch-opt def:0] 
-    JB_CDEJECT  (void)  -WIP
-    JB_POPUPW   [s:msg] [s:wTitle-opt def:JB]
-    JB_POPUPA   [s:msg] [s:wTitle-opt def:JB]
-    JB_EXEC     [s:cmd] -WIP
-    JB_ROTATESCR[i:angle] (0-default, 1-90deg, 2-180deg, 3-270deg)  -WIP
-    JB_CHANGERES[i:res] -WIP
-    JB_LOGKEYS  (void)  -WIP
+    11. JB_OPENWEB  [s:site] [i:googleSearch-opt def:0] 
+    12. JB_CDEJECT  (void)  -WIP
+    13. JB_POPUPW   [s:msg] [s:wTitle-opt def:JB]
+    14. JB_POPUPA   [s:msg] [s:wTitle-opt def:JB]
+    15. JB_EXEC     [s:cmd] -WIP
+    16. JB_ROTATESCR[i:angle] (0-default, 1-90deg, 2-180deg, 3-270deg)  -WIP
+    17. JB_CHANGERES[i:res] -WIP
+    18. JB_LOGKEYS  (void)  -WIP
 */
 
 typedef enum {

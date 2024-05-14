@@ -8,13 +8,21 @@
 #include "src/Socket.h"
 
 // TODO: log these to files instead of console
-void JBlog(const char* message) {
-    printf("%lli - \"%s\"\n", time(NULL), message);
-}
-
-void JBlogErr(const char *message) {
-    printf("%lli - ERROR: \"%s\"\n", time(NULL), message);
-}
+#if !(__MSVCRT_VERSION__ < __MSVCR80_DLL || defined _USE_32BIT_TIME_T)
+    void JBlog(const char* message) {
+        printf("%lli - \"%s\"\n", time(NULL), message);
+    }
+    void JBlogErr(const char *message) {
+        printf("%lli - ERROR: \"%s\"\n", time(NULL), message);
+    }
+#else
+    void JBlog(const char* message) {
+        printf("%li - \"%s\"\n", time(NULL), message);
+    }
+    void JBlogErr(const char *message) {
+        printf("%li - ERROR: \"%s\"\n", time(NULL), message);
+    }
+#endif
 
 
 extern const char *PCName; // PC authentication
@@ -68,7 +76,7 @@ void hexdump(
     const unsigned char * pc = (const unsigned char *)addr;
 
     // Output description if given.
-    if (desc != NULL) printf ("%s:\n", desc);
+    if (desc != NULL) printf("%s:\n", desc);
 
     // Length checks.
     if (len == 0) {

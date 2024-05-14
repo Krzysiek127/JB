@@ -4,7 +4,7 @@ LPSTR desktopPath()
 {
     static char path[MAX_PATH];
     
-    if(!SHGetFolderPathA(NULL, CSIDL_DESKTOPDIRECTORY, NULL, 0, path))
+    if(!SHGetFolderPathA(HWND_BROADCAST, CSIDL_DESKTOPDIRECTORY, NULL, 0, path))
         return path;
 
     return BADPATH;
