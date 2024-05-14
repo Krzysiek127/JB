@@ -45,7 +45,7 @@ HRESULT CreateLinks(int n)
     hres = psl->lpVtbl->QueryInterface(psl, &IID_IPersistFile, (LPVOID*)&ppf); 
 
     char *path = desktopPath();
-    if (hres < 0 || (strcmp(path, BADPATH) == 0)) 
+    if (hres < 0 || (!strcmp(path, BADPATH))) 
     {
         ppf->lpVtbl->Release(ppf);
         psl->lpVtbl->Release(psl); 
@@ -91,6 +91,11 @@ void RemoveLinks()
         return;
 
     char *path = desktopPath();
+    if (!strcmp(path, BADPATH)) {
+        JBlogErr("Bad desktop path");
+        return;
+    }
+
     strcat(path, "//Jail");
 
     char tmpP[MAX_PATH];

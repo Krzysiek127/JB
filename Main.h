@@ -28,8 +28,8 @@
 
 /* ----- Defines ----- */
 #define PORT 2005
-#define SEP "\x03"  // argument separator
-#define SEPC '\x03' // char form
+#define SEP "\x03"   // argument separator
+#define SEPC '\x03'  // char form
 #define SEPL L"\x03" // wchar form
 
 #define CMD_ARGSZ 512
@@ -41,15 +41,13 @@
 #undef APPCOMMAND_VOLUME_DOWN
 #endif
 
-#define APPCOMMAND_VOLUME_UP 0xA0000 // volume 100
-#define APPCOMMAND_VOLUME_DOWN 0x90000 // volume 0
+#define APPCOMMAND_VOLUME_UP 0xA0000    // volume 100
+#define APPCOMMAND_VOLUME_DOWN 0x90000  // volume 0
 
 // logging to local text file
 void JBlog(const char *msg);
 void JBlogErr(const char *msg);
 
-// pragma my nigga
-// #pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup") // TODO: Only works for MSVC. Make it work for GCC
 void hexDump (
     const char *desc,
     const void *addr,

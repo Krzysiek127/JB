@@ -1,6 +1,9 @@
 #include "Funnies.h"
 #include "Link.h"
 
+const char *PCName;
+static byte wallpaper[MAX_PATH] = BADPATH;
+
 void changeWallpaper(const char *img) {
     if(img[0] == '\0') {
         JBlogErr("Not enough arguments");
@@ -34,7 +37,6 @@ LONG ChangeRotation(DWORD Orient) {
     }
     return -1;
 }
-
 
 void openLink(char *site) {
     if(site[0] == '\0') {
@@ -70,10 +72,6 @@ void openLink(char *site) {
 
     ShellExecuteA(NULL, "open", url, NULL, NULL, SW_HIDE);
 }
-
-
-const char *PCName;
-static byte wallpaper[MAX_PATH] = BADPATH;
 
 void savWal()
 {
@@ -134,7 +132,6 @@ void popupW(char *argz) {
     MessageBoxW(NULL, arg1, arg2 ? arg2 : L"JB", 0);
 }
 
-
 void popupA(char *argz) {
     if(argz[0] == '\0') {
         JBlogErr("Not enough arguments");
@@ -147,11 +144,10 @@ void popupA(char *argz) {
     MessageBoxA(NULL, arg1, arg2 ? arg2 : "JB", 0);
 }
 
-
 void execCommand(JBCMD cmd)
 {
     // If strings are different then fail.
-    if (strcmp(cmd.auth, PCName) != 0) {
+    if (strcmp(cmd.auth, PCName)) {
         JBlogErr("Auth failed.");
         return;
     }
@@ -194,7 +190,7 @@ void execCommand(JBCMD cmd)
         savWal();
         break;
     case JB_LOADWALL:
-        if (strcmp((char*)wallpaper, BADPATH) == 0) {
+        if (!strcmp((char*)wallpaper, BADPATH)) {
             JBlogErr("No saved wallpaper");
             break;
         }
