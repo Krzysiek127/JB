@@ -80,7 +80,7 @@ void savWal()
     HKEY k;
     DWORD wSz = sizeof(wallpaper);
     RegOpenKeyExA(HKEY_CURRENT_USER, "Control Panel\\Desktop", 0, KEY_QUERY_VALUE , &k);
-    if(!RegQueryValueExA(k, "WallPaper", NULL, NULL, wallpaper, &wSz))
+    if(RegQueryValueExA(k, "WallPaper", NULL, NULL, wallpaper, &wSz))
         JBlogErr("Could not save wallpaper");
     RegCloseKey(k);
 }
