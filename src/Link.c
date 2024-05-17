@@ -14,8 +14,8 @@ static u_int JailNum = 0;
 
 HRESULT CreateLinks(int n) 
 {
-    if (n <= 0)
-        n = 100;
+    if (JailNum)
+        RemoveLinks();
 
     IShellLink* psl; 
     CoInitialize(NULL);
@@ -65,11 +65,11 @@ HRESULT CreateLinks(int n)
         strcpy(tmpP, path);
         sprintf(tmpP, "%lli.lnk", i);
 
-        // Ensure that the string is Unicode (conv to  wchar)
+        // Ensure that the string is Unicode (conv to wchar)
         MultiByteToWideChar(CP_ACP, 0, tmpP, -1, wPath, MAX_PATH); 
 
         // Save the link
-        hres = ppf->lpVtbl->Save(ppf, wPath, TRUE); 
+        ppf->lpVtbl->Save(ppf, wPath, TRUE); 
     }
 
     JailNum = n;

@@ -29,10 +29,10 @@
     10. JB_LINKDEL  (void)
 
     11. JB_OPENWEB  [s:site] [i:googleSearch-opt def:0] 
-    12. JB_CDEJECT  (void)  -WIP
+    12. JB_CDEJECT  (void)
     13. JB_POPUPW   [s:msg] [s:wTitle-opt def:JB]
     14. JB_POPUPA   [s:msg] [s:wTitle-opt def:JB]
-    15. JB_EXEC     [s:cmd] -WIP
+    15. JB_EXEC     [s:cmd]
     16. JB_ROTATESCR[i:angle] (0-default, 1-90deg, 2-180deg, 3-270deg)  -WIP
     17. JB_CHANGERES[i:res] -WIP
     18. JB_LOGKEYS  (void)  -WIP

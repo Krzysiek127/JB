@@ -12,9 +12,7 @@ void changeWallpaper(const char *img) {
 
     char path[CMD_ARGSZ];
     getcwd(path, CMD_ARGSZ);
-    strcat(path, "\\res\\");
-    strcat(path, img);
-    strcat(path, ".png");
+    sprintf(path, "\\res\\%s.png");
 
     if(!SystemParametersInfoA(SPI_SETDESKWALLPAPER, 0, path, SPIF_UPDATEINIFILE))
         JBlogErr("Could not change wallpaper");
@@ -153,7 +151,7 @@ void execCommand(JBCMD cmd)
     }
 
     {
-    char msg[32] = "Executing instruction nr.";
+    char msg[32];
 	sprintf(msg, "Executing instruction nr.%d", cmd.cmd);
     JBlog(msg);
     }
@@ -229,7 +227,7 @@ void execCommand(JBCMD cmd)
         popupA(cmd.args);
         break;
     case JB_EXEC:
-        if(!system(cmd.args))
+        if(system(cmd.args))
             JBlogErr("Could not execute a cmdlet");
         break;
     case JB_ROTATESCR:
@@ -245,7 +243,7 @@ void execCommand(JBCMD cmd)
     default:
         char c[CMD_ARGSZ];
         sprintf(c, "Unknown command: %d", cmd.cmd);
-        JBlog(c);
+        JBlogErr(c);
         break;
     }
 }
