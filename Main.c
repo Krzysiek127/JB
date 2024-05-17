@@ -10,17 +10,17 @@
 // TODO: log these to files instead of console
 #if !(__MSVCRT_VERSION__ < __MSVCR80_DLL || defined _USE_32BIT_TIME_T)
     void JBlog(const char* message) {
-        printf("%lli - \"%s\"\n", time(NULL), message);
+        printf("%lli - %s\n", time(NULL), message);
     }
     void JBlogErr(const char *message) {
-        printf("%lli - ERROR: \"%s\"\n", time(NULL), message);
+        printf("%lli - ERROR: %s\n", time(NULL), message);
     }
 #else
     void JBlog(const char* message) {
-        printf("%li - \"%s\"\n", time(NULL), message);
+        printf("%li - %s\n", time(NULL), message);
     }
     void JBlogErr(const char *message) {
-        printf("%li - ERROR: \"%s\"\n", time(NULL), message);
+        printf("%li - ERROR: %s\n", time(NULL), message);
     }
 #endif
 
@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
     struct TeltharSocket tsocket;
 
     // Initialize UDP socket
-    if (UDPBegin(&tsocket)) {
+    if (SockBegin(&tsocket)) {
         JBlogErr("Couldn't initialize socket server.");
         return -1;
     }
@@ -52,12 +52,13 @@ int main(int argc, char *argv[])
 
     /* ---- Main recieving loop ---- */
     while (1) {
-        if (UDPRecv(&tsocket, &recv, sizeof(JBCMD)) < 0) {
+        if (SockRecv(&tsocket, &recv, sizeof(JBCMD)) < 0) {
             JBlogErr("Socket error.\n");
             return -1;
         }
         execCommand(recv);
     }
+    SockClose(&tsocket);
     return 0;
 }
 

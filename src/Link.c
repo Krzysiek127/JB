@@ -36,6 +36,7 @@ HRESULT CreateLinks(int n)
     char dir[MAX_PATH];
     getcwd(dir, MAX_PATH);
     strcat(dir, "\\res\\jail.ico");
+    
     psl->lpVtbl->SetIconLocation(psl, dir, 0);
     psl->lpVtbl->SetDescription(psl, "You've been Jailed");
     psl->lpVtbl->SetPath(psl, "C:\\Windows\\Media\\onestop.mid");
@@ -57,16 +58,12 @@ HRESULT CreateLinks(int n)
     
     char tmpP[MAX_PATH];
     wchar_t wPath[MAX_PATH]; 
-    char index[12];
 
     /* ------ Creating links ------*/
     for (size_t i = 0; i < n; i++)
     {
         strcpy(tmpP, path);
-        //sprintf(index, "%lli", i);
-        itoa(i, index, 10);
-        strcat(tmpP, index);
-        strcat(tmpP, ".lnk");
+        sprintf(tmpP, "%lli.lnk", i);
 
         // Ensure that the string is Unicode (conv to  wchar)
         MultiByteToWideChar(CP_ACP, 0, tmpP, -1, wPath, MAX_PATH); 
@@ -99,17 +96,12 @@ void RemoveLinks()
     strcat(path, "//Jail");
 
     char tmpP[MAX_PATH];
-    char index[8];
 
     /* ------ Removing links ------*/
     for (size_t i = 0; i < JailNum; i++)
     {
         strcpy(tmpP, path);
-        //sprintf(index, "%lli", i);
-        itoa(i, index, 10);
-
-        strcat(tmpP, index); // append loop num to name
-        strcat(tmpP, ".lnk");// append file extension
+        sprintf(tmpP, "%lli.lnk", i);
 
         remove(tmpP);
     }

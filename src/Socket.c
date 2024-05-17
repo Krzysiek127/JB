@@ -3,7 +3,7 @@
 
 // i aint commenting this shit
 
-int UDPBegin(struct TeltharSocket *tsock) {
+int SockBegin(struct TeltharSocket *tsock) {
     tsock->si_otherlen = sizeof(tsock->si_other);
     
     if (WSAStartup(MAKEWORD(2, 2), &tsock->wsa) != 0) {
@@ -25,16 +25,13 @@ int UDPBegin(struct TeltharSocket *tsock) {
     return 0;
 }
 
-int UDPRecv(struct TeltharSocket *tsock, void *out, size_t maxlen) {
+int SockRecv(struct TeltharSocket *tsock, void *out, size_t maxlen) {
     memset(out, '\0', maxlen);
 
     int recvl;
     if ((recvl = recvfrom(tsock->sock, out, maxlen, 0, (struct sockaddr*)&tsock->si_other, &tsock->si_otherlen)) == SOCKET_ERROR) {
-        char err[28] = "WSA error: ";
-        char errCode[32];
-        sprintf(errCode, "%d", WSAGetLastError());
-
-        strcat(err, errCode);
+        char err[32];
+        sprintf(err, "WSA error: %d", WSAGetLastError());
         JBlogErr(err);
         return -1;
     }
@@ -42,11 +39,11 @@ int UDPRecv(struct TeltharSocket *tsock, void *out, size_t maxlen) {
     return recvl;
 }
 
-int UDPRespond(struct TeltharSocket *tsock, void *out, size_t len) {
+int SockRespond(struct TeltharSocket *tsock, void *out, size_t len) {
     return recvfrom(tsock->sock, out, len, 0, (struct sockaddr*)&tsock->si_other, &tsock->si_otherlen);
 }
 
-void UDPClose(struct TeltharSocket *tsock) {
+void SockClose(struct TeltharSocket *tsock) {
     closesocket(tsock->sock);
     WSACleanup();
 }

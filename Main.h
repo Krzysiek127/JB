@@ -22,6 +22,7 @@
 #include <tchar.h>
 #include <locale.h>
 #include <mbstring.h>
+#include <mmsystem.h>
 
 // Please for the love of god DO NOT UNCOMMENT THIS UNHOLY LINE
 //#define TELTHAR_STUPID_WIDE_CHAR    LOCALE_ALL

