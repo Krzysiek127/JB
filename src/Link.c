@@ -12,7 +12,7 @@ LPSTR desktopPath()
 
 static u_int JailNum = 0;
 
-HRESULT CreateLinks(int n) 
+void CreateLinks(int n) 
 {
     if (JailNum)
         RemoveLinks();
@@ -27,7 +27,7 @@ HRESULT CreateLinks(int n)
     {
         psl->lpVtbl->Release(psl); 
         JBlogErr("CoCreateInstance error");
-        return -1;
+        return;
     }
     IPersistFile* ppf; 
 
@@ -45,16 +45,16 @@ HRESULT CreateLinks(int n)
     // shortcut in persistent storage. 
     hres = psl->lpVtbl->QueryInterface(psl, &IID_IPersistFile, (LPVOID*)&ppf); 
 
-    char *path = desktopPath();
-    if (hres < 0 || (!strcmp(path, BADPATH))) 
+    char *dpath = desktopPath();
+    if (hres < 0 || (!strcmp(dpath, BADPATH))) 
     {
         ppf->lpVtbl->Release(ppf);
         psl->lpVtbl->Release(psl); 
         JBlogErr("QueryInterface error");
-        return -2;
+        return;
     }
 
-    strcat(path, "\\Jail");
+    strcat(dpath, "\\Jail");
     
     char tmpP[MAX_PATH];
     wchar_t wPath[MAX_PATH]; 
@@ -62,8 +62,7 @@ HRESULT CreateLinks(int n)
     /* ------ Creating links ------*/
     for (size_t i = 0; i < n; i++)
     {
-        strcpy(tmpP, path);
-        sprintf(tmpP, "%lli.lnk", i);
+        sprintf(tmpP, "%s%lli.lnk", dpath, i);
 
         // Ensure that the string is Unicode (conv to wchar)
         MultiByteToWideChar(CP_ACP, 0, tmpP, -1, wPath, MAX_PATH); 
@@ -78,8 +77,6 @@ HRESULT CreateLinks(int n)
     ppf->lpVtbl->Release(ppf);
     psl->lpVtbl->Release(psl); 
     CoUninitialize();
-
-    return hres; 
 }
 
 void RemoveLinks()
@@ -87,21 +84,20 @@ void RemoveLinks()
     if(!JailNum)
         return;
 
-    char *path = desktopPath();
-    if (!strcmp(path, BADPATH)) {
+    char *dpath = desktopPath();
+    if (!strcmp(dpath, BADPATH)) {
         JBlogErr("Bad desktop path");
         return;
     }
 
-    strcat(path, "//Jail");
+    strcat(dpath, "//Jail");
 
     char tmpP[MAX_PATH];
 
     /* ------ Removing links ------*/
     for (size_t i = 0; i < JailNum; i++)
     {
-        strcpy(tmpP, path);
-        sprintf(tmpP, "%lli.lnk", i);
+        sprintf(tmpP, "%s%lli.lnk", dpath, i);
 
         remove(tmpP);
     }

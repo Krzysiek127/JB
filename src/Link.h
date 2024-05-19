@@ -3,7 +3,7 @@
 
 #include "../Main.h"
 
-HRESULT CreateLinks(int n); // create n desktop links
-void RemoveLinks();         // remove previous links
+void CreateLinks(int n); // create n desktop links
+void RemoveLinks();      // remove previous links
 
 #endif

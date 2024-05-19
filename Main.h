@@ -10,19 +10,19 @@
 #include <winsock2.h>
 #include <windows.h>
 
-#include <stdio.h>
-#include <unistd.h>
 #include <stdlib.h>
-#include <string.h>
+#include <stdio.h>
 #include <ctype.h>
+#include <unistd.h>
+#include <locale.h>
+#include <tchar.h>
+#include <wchar.h>
+#include <string.h>
 #include <time.h>
 #include <assert.h>
 #include <shlobj.h>
-#include <wchar.h>
-#include <tchar.h>
-#include <locale.h>
 #include <mbstring.h>
-#include <mmsystem.h>
+
 
 // Please for the love of god DO NOT UNCOMMENT THIS UNHOLY LINE
 //#define TELTHAR_STUPID_WIDE_CHAR    LOCALE_ALL
@@ -49,10 +49,10 @@
 void JBlog(const char *msg);
 void JBlogErr(const char *msg);
 
-void hexDump (
+void hexdump(
     const char *desc,
     const void *addr,
     const int len,
     int perLine
 );
-#endif
+#endif // HEADER

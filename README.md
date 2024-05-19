@@ -3,7 +3,7 @@
 
 ##  Akademia Pranków Cheetos
 
-:Jail:breaker alpha build 03052024-1110 made by *The Three Retards* aims to cause the most EPIC trollage in the Regional Centre of Professional Education in Low Town. Written in C, jailbreaker allows for remote activities such as:
+:Jail:breaker Beta build made by *The Three Retards©* aims to cause the most EPIC trollage in the Regional Centre of Professional Education in Low Town. Written in C, jailbreaker allows for remote activities such as:
 * Displaying MessageBox
 * Playing predefined sounds		(🎵Polskie szamba liderem są w kraju🎵)
 * Changing wallpaper
@@ -18,5 +18,4 @@
 
 
 ## Disclaimer
-Jailbreaker isn't meant to cause any harm, it's just made to prank people who don't log off from their PCs.
-The programs broadcasts it's data over whole UDP network (not just subnet) so it's really easy to detect.
+Jailbreaker isn't meant to cause (realtively) any harm, it's just made to prank people who don't log off from their PCs.
